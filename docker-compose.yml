@@ -1,0 +1,94 @@
+services:
+  # 1. Base de Datos PostgreSQL
+  db:
+    image: postgres:15-alpine
+    container_name: sign_lang_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secretpassword
+      POSTGRES_DB: sign_language_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # 2. Backend (Java / Spring Boot)
+  backend:
+    build: 
+      context: ./backend-springboot
+      dockerfile: Dockerfile
+    container_name: sign_lang_backend
+    depends_on:
+      db:
+        condition: service_started
+      ai-service:
+        condition: service_started
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/sign_language_db
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=secretpassword
+      - AI_SERVICE_URL=http://ai-service:8000 # URL interna para comunicarse con Python
+      # Configuración recomendada para Spring Boot en Docker
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # 3. Servicio de IA (Python / FastAPI)
+  ai-service:
+    build:
+      context: ./ai-service-python
+      dockerfile: Dockerfile
+    container_name: sign_lang_ai
+    environment:
+      # Opcional: configurar workers o entorno
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+    restart: unless-stopped
+    # Si vas a usar GPU descomenta la siguiente sección
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+  # 4. Frontend (React)
+  frontend:
+    build:
+      context: ./frontend-react
+      dockerfile: Dockerfile
+      # Para desarrollo de React, se suele usar otro target o comandos específicos
+    container_name: sign_lang_frontend
+    depends_on:
+      backend:
+        condition: service_started
+    environment:
+      - REACT_APP_API_URL=http://localhost:8080 # El frontend llama al backend desde el navegador
+      # o VITE_API_URL=http://localhost:8080 si usas Vite
+      - CHOKIDAR_USEPOLLING=true # Frecuentemente necesario para Hot Reload en Windows
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mapear el código local al contenedor para desarrollo (útil si la imagen no es de producción)
+      - ./frontend-react/src:/app/src
+    networks:
+      - app-network
+    restart: unless-stopped
+
+# Definición de volúmenes persistentes y redes internas
+volumes:
+  pgdata:
+
+networks:
+  app-network:
+    driver: bridge
