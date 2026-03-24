@@ -12,8 +12,8 @@ Este es el motor de inferencia e Inteligencia Artificial del sistema. Desarrolla
 - **`POST /predict`**: Endpoint principal de inferencia. Recibe un payload JSON y retorna la cadena de texto con la predicción inferida.
 
 FastAPI genera documentación automática interactiva de la API. Al correr el servidor localmente, puedes acceder a:
-- 🔗 **Swagger UI:** `http://localhost:8000/docs`
-- 🔗 **ReDoc:** `http://localhost:8000/redoc`
+- **Swagger UI:** `http://localhost:8000/docs`
+- **ReDoc:** `http://localhost:8000/redoc`
 
 ## Desarrollo Local (Independiente)
 1. Crear un entorno virtual (altamente recomendado):

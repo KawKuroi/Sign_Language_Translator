@@ -2,7 +2,7 @@
 
 Este es el repositorio principal del **Traductor de Lenguaje de Señas**, una aplicación orientada a microservicios diseñada para interpretar el lenguaje de señas en tiempo real a través de la cámara del usuario usando Inteligencia Artificial.
 
-## 🏗 Arquitectura del Sistema
+## Arquitectura del Sistema
 
 El proyecto está diseñado usando una arquitectura de microservicios, lo que permite un desarrollo, escalabilidad y despliegue independientes. Consta de tres componentes principales:
 
@@ -12,7 +12,7 @@ El proyecto está diseñado usando una arquitectura de microservicios, lo que pe
 
 ---
 
-## 🚀 Inicio Rápido con Docker
+## Inicio Rápido con Docker
 
 La forma más sencilla y recomendada de ejecutar todo el ecosistema es utilizando **Docker Compose**. Esto levantará los tres servicios automáticamente y los conectará en una misma red interna.
 
@@ -23,7 +23,7 @@ La forma más sencilla y recomendada de ejecutar todo el ecosistema es utilizand
 
 1. Clona el repositorio y posiciónate en la raíz del proyecto:
    ```bash
-   git clone <url-del-repositorio>
+   git clone https://github.com/KawKuroi/Sign_Language_Translator.git
    cd Sign_Language_Translator
    ```
 
@@ -45,7 +45,7 @@ docker-compose down
 
 ---
 
-## 📡 Endpoints de las APIs
+## Endpoints de las APIs
 
 El sistema expone una serie de endpoints para procesar las traducciones.
 
@@ -64,16 +64,16 @@ Este microservicio es responsable exclusivo de inferir predicciones a partir de 
 
 ---
 
-## 🧠 Entrenamiento de Inteligencia Artificial
+## Entrenamiento de Inteligencia Artificial
 
 El proceso de recolección de datos y entrenamiento del modelo de predicción del lenguaje de señas se realizó en un entorno interactivo de Google Colab. 
 Allí se encuentra el flujo completo para extraer *landmarks* (puntos clave de la mano) usando MediaPipe y entrenar la red neuronal que luego se consume en nuestro microservicio de Python.
 
-🔗 **[Ver Notebook de Entrenamiento en Google Colab](https://colab.research.google.com/drive/1BFoFFgJX0FTVEcPoMJkZ_aEfE5e9tLO5)**
+**[Ver Notebook de Entrenamiento en Google Colab](https://colab.research.google.com/drive/1BFoFFgJX0FTVEcPoMJkZ_aEfE5e9tLO5)**
 
 ---
 
-## 🛠 Tecnologías Utilizadas
+## Tecnologías Utilizadas
 
 - **Frontend**: React, TypeScript, Axios, CSS/HTML5.
 - **Backend**: Java 17+, Spring Boot, Maven.
@@ -82,9 +82,9 @@ Allí se encuentra el flujo completo para extraer *landmarks* (puntos clave de l
 
 ---
 
-## 📖 Instrucciones de Desarrollo Local Independiente
+## Instrucciones de Desarrollo Local Independiente
 Si necesitas trabajar en un solo microservicio sin levantar todo el proyecto con Docker, por favor revisa el `README.md` específico dentro de cada carpeta:
 
-* 📄 `frontend-react/README.md`
-* 📄 `backend-springboot/README.md`
-* 📄 `ai-service-python/README.md`
+* `frontend-react/README.md`
+* `backend-springboot/README.md`
+* `ai-service-python/README.md`
