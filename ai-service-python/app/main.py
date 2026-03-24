@@ -1,10 +1,28 @@
 from fastapi import FastAPI
-from app.api.routes import router as api_router
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+import logging
 
-app = FastAPI(title="Sign Language AI Service", version="1.0.0")
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-app.include_router(api_router, prefix="/api/v1")
+app = FastAPI(title="Sign Language Translation AI Service")
 
-@app.get("/")
-def root():
-    return {"message": "AI Service running"}
+# Configuración de CORS para permitir solicitudes del Frontend y Backend en local
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Modificar si se quiere restringir
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+class PredictRequest(BaseModel):
+    # Este esquema se adaptará luego a la información recibida (landmarks, imágenes, etc.)
+    data: dict | str | None = None
+
+@app.post("/predict")
+async def predict(request: PredictRequest):
+    logger.info("Received prediction request")
+    # Devuelve un texto estático por ahora
+    return {"prediction": "Hola Mock desde AI Service"}

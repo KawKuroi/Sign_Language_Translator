@@ -1,11 +1,19 @@
-FROM node:20-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
+# Build-time environment para Node
+FROM node:18-alpine
 
-FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+WORKDIR /app
+
+# Copiar configuración de dependencias
+COPY package.json package-lock.json* ./
+
+# Instalar dependencias
+RUN npm install
+
+# Copiar el código fuente
+COPY . .
+
+# Exponer el puerto de Vite
+EXPOSE 3000
+
+# Añadir el comando para que inicie la app escuchando globalmente
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
