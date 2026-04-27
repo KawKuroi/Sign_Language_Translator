@@ -10,8 +10,18 @@ Este módulo expone la API principal del sistema (Java con Spring Boot). Actúa 
 - `AI_SERVICE_URL`: URL del motor de Python (por defecto `http://localhost:8000`).
 
 ## Endpoints Disponibles
-- **`GET /translate`**: Endpoint de salud/prueba.
-- **`POST /translate`**: Recibe las instrucciones del frontend y coordina con el AI Service para retornar el texto traducido.
+- **`GET /translate`**: Health check.
+- **`POST /translate`**: Recibe el frame del frontend (imagen base64 en el body), lo reenvía a `AI_SERVICE_URL/predict` y devuelve la predicción al cliente.
+
+  **Body esperado:**
+  ```json
+  { "image": "data:image/jpeg;base64,..." }
+  ```
+
+  **Respuesta esperada del AI Service (transparente hacia el frontend):**
+  ```json
+  { "hand_found": true, "letter": "A", "confidence": 0.97, "top": [...] }
+  ```
 
 ## Desarrollo Local (Independiente)
 Asegúrate de tener Java 17 localmente.

@@ -1,6 +1,15 @@
 # Root .gitignore
+.claude/
 .idea/
 .vscode/
 *.swp
 *.swo
 .DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.local

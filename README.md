@@ -51,16 +51,17 @@ El sistema expone una serie de endpoints para procesar las traducciones.
 
 ### Backend (Spring Boot - `:8080`)
 Este servicio actúa como gateway principal para las consultas de la aplicación.
-- **`POST /translate`**: Endpoint principal de traducción. Recibe la petición del frontend y coordina la lógica con el servicio de Inteligencia Artificial. Retorna `Hola Mock` (actualmente en fase de prueba).
+- **`POST /translate`**: Recibe el frame del frontend (imagen base64) y lo reenvía al AI Service para obtener la predicción.
 
 ### AI Service (Python/FastAPI - `:8000`)
-Este microservicio es responsable exclusivo de inferir predicciones a partir de los datos.
+Motor de inferencia. Recibe una imagen de la mano, extrae landmarks con MediaPipe y clasifica la seña con la red neuronal.
 - **`POST /predict`**:
-  - **Body esperado**: Objeto JSON con la información de los nodos espaciales de la mano (`data`).
-  - **Descripción**: Procesa la entrada y devuelve la predicción textual de la seña ejecutada.
-  - **Respuesta (Mocking actual)**: `{"prediction": "Hola Mock desde AI Service"}`
+  - **Body**: `{ "image": "data:image/jpeg;base64,..." }` — data-URL o base64 puro.
+  - **Respuesta (mano detectada)**: `{ "hand_found": true, "letter": "A", "confidence": 0.97, "top": [...] }`
+  - **Respuesta (sin mano)**: `{ "hand_found": false, "letter": null, "confidence": 0.0, "top": [] }`
+  - **Letras soportadas**: A–Y (J y Z excluidas por requerir movimiento).
 
-> **Nota para Desarrolladores:** Puedes acceder a la interfaz interactiva Swagger generada automáticamente por FastAPI yendo a `http://localhost:8000/docs` cuando corras el servicio.
+> Documentación interactiva Swagger disponible en `http://localhost:8000/docs`.
 
 ---
 
@@ -77,7 +78,7 @@ Allí se encuentra el flujo completo para extraer *landmarks* (puntos clave de l
 
 - **Frontend**: React, TypeScript, Axios, CSS/HTML5.
 - **Backend**: Java 17+, Spring Boot, Maven.
-- **AI Service**: Python 3+, FastAPI, Uvicorn, Pydantic (Preparado para TensorFlow / MediaPipe).
+- **AI Service**: Python 3.10+, FastAPI, Uvicorn, Pydantic, TensorFlow 2.16+, MediaPipe, OpenCV.
 - **Despliegue/Infraestructura**: Docker, Docker Compose.
 
 ---

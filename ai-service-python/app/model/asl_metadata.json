@@ -1,0 +1,33 @@
+{
+  "labels": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y"
+  ],
+  "num_classes": 24,
+  "n_features": 63,
+  "n_landmarks": 21,
+  "normalization": "wrist_relative_max_scale",
+  "test_accuracy": 0.9715780019760132
+}

@@ -25,3 +25,6 @@ share/python-wheels/
 .pytest_cache/
 .coverage
 htmlcov/
+
+# MediaPipe task file — descargado automáticamente al iniciar (no se versiona)
+app/model/hand_landmarker.task

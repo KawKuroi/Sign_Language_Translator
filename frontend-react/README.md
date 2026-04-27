@@ -11,6 +11,16 @@ Este es el módulo de interfaz de usuario para el Traductor de Lenguaje de Seña
 Si corres este proyecto localmente, asegúrate de configurar el endpoint del backend:
 - `REACT_APP_API_URL`: URL del Backend (por defecto `http://localhost:8080`).
 
+## Flujo de datos
+
+Cada 2 000 ms el componente captura un frame del webcam, lo convierte a base64 y envía un `POST /translate` al backend con el payload:
+
+```json
+{ "image": "data:image/jpeg;base64,..." }
+```
+
+El backend reenvía la imagen al AI Service y devuelve la predicción que se muestra en `TranslationBox`.
+
 ## Desarrollo Local (Independiente)
 
 Para trabajar únicamente en el entorno visual sin Docker:
@@ -20,7 +30,7 @@ Para trabajar únicamente en el entorno visual sin Docker:
    ```
 2. Ejecutar servidor de desarrollo:
    ```bash
-   npm start
+   npm run dev
    ```
 
 ## Dockerización
