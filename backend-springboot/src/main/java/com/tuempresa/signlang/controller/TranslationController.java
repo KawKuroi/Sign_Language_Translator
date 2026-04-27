@@ -4,8 +4,10 @@ import com.tuempresa.signlang.dto.TranslationRequest;
 import com.tuempresa.signlang.dto.TranslationResponse;
 import com.tuempresa.signlang.service.AiServiceClient;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestClientException;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +28,12 @@ public class TranslationController {
     @PostMapping
     @SuppressWarnings("unchecked")
     public ResponseEntity<TranslationResponse> translate(@RequestBody TranslationRequest request) {
-        Map<String, Object> aiResult = aiServiceClient.predict(request.getImage());
+        Map<String, Object> aiResult;
+        try {
+            aiResult = aiServiceClient.predict(request.getImage());
+        } catch (RestClientException e) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
+        }
 
         boolean handFound = (Boolean) aiResult.getOrDefault("hand_found", false);
         String letter     = (String)  aiResult.get("letter");

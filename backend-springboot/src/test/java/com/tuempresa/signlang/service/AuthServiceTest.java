@@ -81,7 +81,7 @@ class AuthServiceTest {
     }
 
     @Test
-    void login_wrongPassword_throwsBadCredentials() {
+    void login_wrongPassword_throwsUnauthorized() {
         LoginRequest request = new LoginRequest();
         request.setEmail("user@test.com");
         request.setPassword("wrong");
@@ -90,6 +90,8 @@ class AuthServiceTest {
                 .thenThrow(new BadCredentialsException("Bad credentials"));
 
         assertThatThrownBy(() -> authService.login(request))
-                .isInstanceOf(BadCredentialsException.class);
+                .isInstanceOf(ResponseStatusException.class)
+                .satisfies(e -> assertThat(((ResponseStatusException) e).getStatusCode())
+                        .isEqualTo(HttpStatus.UNAUTHORIZED));
     }
 }

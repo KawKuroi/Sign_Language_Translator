@@ -3,7 +3,9 @@ package com.tuempresa.signlang.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tuempresa.signlang.dto.HistoryItemResponse;
 import com.tuempresa.signlang.dto.SaveHistoryRequest;
+import com.tuempresa.signlang.config.SecurityConfig;
 import com.tuempresa.signlang.security.JwtAuthenticationFilter;
+import com.tuempresa.signlang.security.JwtTokenProvider;
 import com.tuempresa.signlang.service.TranslationHistoryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +27,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(HistoryController.class)
-@Import(JwtAuthenticationFilter.class)
+@Import({JwtAuthenticationFilter.class, SecurityConfig.class})
 class HistoryControllerTest {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
     @MockBean private TranslationHistoryService historyService;
     @MockBean private UserDetailsService userDetailsService;
-    @MockBean private com.tuempresa.signlang.security.JwtTokenProvider tokenProvider;
+    @MockBean private JwtTokenProvider tokenProvider;
 
     @Test
     @WithMockUser(username = "user@test.com")

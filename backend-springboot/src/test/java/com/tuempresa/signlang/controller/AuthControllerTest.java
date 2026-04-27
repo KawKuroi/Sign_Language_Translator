@@ -1,10 +1,12 @@
 package com.tuempresa.signlang.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tuempresa.signlang.config.SecurityConfig;
 import com.tuempresa.signlang.dto.LoginRequest;
 import com.tuempresa.signlang.dto.LoginResponse;
 import com.tuempresa.signlang.dto.RegisterRequest;
 import com.tuempresa.signlang.security.JwtAuthenticationFilter;
+import com.tuempresa.signlang.security.JwtTokenProvider;
 import com.tuempresa.signlang.service.AuthService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +25,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(AuthController.class)
-@Import(JwtAuthenticationFilter.class)
+@Import({JwtAuthenticationFilter.class, SecurityConfig.class})
 class AuthControllerTest {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
     @MockBean private AuthService authService;
     @MockBean private UserDetailsService userDetailsService;
-    @MockBean private com.tuempresa.signlang.security.JwtTokenProvider tokenProvider;
+    @MockBean private JwtTokenProvider tokenProvider;
 
     @Test
     void register_validBody_returns201() throws Exception {
@@ -87,7 +89,7 @@ class AuthControllerTest {
         req.setPassword("wrong");
 
         when(authService.login(any()))
-                .thenThrow(new org.springframework.security.authentication.BadCredentialsException("Bad credentials"));
+                .thenThrow(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales incorrectas"));
 
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)

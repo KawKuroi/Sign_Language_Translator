@@ -2,7 +2,9 @@ package com.tuempresa.signlang.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tuempresa.signlang.dto.TranslationRequest;
+import com.tuempresa.signlang.config.SecurityConfig;
 import com.tuempresa.signlang.security.JwtAuthenticationFilter;
+import com.tuempresa.signlang.security.JwtTokenProvider;
 import com.tuempresa.signlang.service.AiServiceClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +26,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(TranslationController.class)
-@Import(JwtAuthenticationFilter.class)
+@Import({JwtAuthenticationFilter.class, SecurityConfig.class})
 class TranslationControllerTest {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
     @MockBean private AiServiceClient aiServiceClient;
     @MockBean private UserDetailsService userDetailsService;
-    @MockBean private com.tuempresa.signlang.security.JwtTokenProvider tokenProvider;
+    @MockBean private JwtTokenProvider tokenProvider;
 
     @Test
     void healthCheck_returns200() throws Exception {
@@ -71,6 +73,6 @@ class TranslationControllerTest {
         mockMvc.perform(post("/translate")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().isServiceUnavailable());
     }
 }
