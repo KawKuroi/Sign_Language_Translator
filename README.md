@@ -70,7 +70,7 @@ Motor de inferencia. Recibe una imagen de la mano, extrae landmarks con MediaPip
 El proceso de recolección de datos y entrenamiento del modelo de predicción del lenguaje de señas se realizó en un entorno interactivo de Google Colab. 
 Allí se encuentra el flujo completo para extraer *landmarks* (puntos clave de la mano) usando MediaPipe y entrenar la red neuronal que luego se consume en nuestro microservicio de Python.
 
-**[Ver Notebook de Entrenamiento en Google Colab](https://colab.research.google.com/drive/1BFoFFgJX0FTVEcPoMJkZ_aEfE5e9tLO5)**
+**[Ver Notebook de Entrenamiento en Google Colab](https://colab.research.google.com/drive/1qajMkPVaFqv2pbhziVAZPs_v8tdftteS)**
 
 ---
 
