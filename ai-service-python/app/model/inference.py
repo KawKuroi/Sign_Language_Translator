@@ -1,21 +1,18 @@
-import io
 import json
 import logging
-import tempfile
-import zipfile
 from pathlib import Path
 
 import cv2
 import mediapipe as mp
 import numpy as np
-import tensorflow as tf
+from ai_edge_litert.interpreter import Interpreter
 from mediapipe.tasks import python as mp_python
 from mediapipe.tasks.python import vision as mp_vision
 
 logger = logging.getLogger(__name__)
 
 _MODEL_DIR = Path(__file__).parent
-_KERAS_PATH = _MODEL_DIR / "asl_model.keras"
+_TFLITE_PATH = _MODEL_DIR / "asl_model.tflite"
 _META_PATH = _MODEL_DIR / "asl_metadata.json"
 _TASK_PATH = _MODEL_DIR / "hand_landmarker.task"
 
@@ -24,10 +21,11 @@ _TASK_URL = (
     "hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task"
 )
 
-# Module-level singletons — loaded once at startup, reused across all requests.
-_model = None
+_interpreter = None
 _labels: list[str] = []
 _detector = None
+_input_index: int = 0
+_output_index: int = 0
 
 
 def _ensure_task_file() -> None:
@@ -40,57 +38,18 @@ def _ensure_task_file() -> None:
     logger.info("hand_landmarker.task downloaded.")
 
 
-def _strip_quantization_config(obj) -> None:
-    """Recursively remove quantization_config keys added by Keras 3.1+."""
-    if isinstance(obj, dict):
-        obj.pop("quantization_config", None)
-        for v in obj.values():
-            _strip_quantization_config(v)
-    elif isinstance(obj, list):
-        for item in obj:
-            _strip_quantization_config(item)
-
-
-def _load_model_compat(keras_path: Path):
-    """Load a .keras model, patching out quantization_config for Keras < 3.1 compat.
-
-    The .keras format is a ZIP. We rewrite config.json in memory, write to a
-    temp file (load_model requires a path), load it, then delete the temp file.
-    """
-    buf = io.BytesIO()
-    with zipfile.ZipFile(str(keras_path), "r") as src:
-        with zipfile.ZipFile(buf, "w") as dst:
-            for info in src.infolist():
-                data = src.read(info.filename)
-                if info.filename == "config.json":
-                    cfg = json.loads(data)
-                    _strip_quantization_config(cfg)
-                    data = json.dumps(cfg).encode()
-                dst.writestr(info, data)
-    buf.seek(0)
-
-    with tempfile.NamedTemporaryFile(suffix=".keras", delete=False) as tmp:
-        tmp.write(buf.read())
-        tmp_path = Path(tmp.name)
-
-    try:
-        return tf.keras.models.load_model(str(tmp_path))
-    finally:
-        tmp_path.unlink(missing_ok=True)
-
-
 def load_resources() -> None:
-    global _model, _labels, _detector
+    global _interpreter, _labels, _detector, _input_index, _output_index
 
     _ensure_task_file()
 
-    logger.info("Loading Keras model...")
-    try:
-        _model = tf.keras.models.load_model(str(_KERAS_PATH))
-    except (TypeError, ValueError):
-        logger.info("Applying quantization_config compatibility patch...")
-        _model = _load_model_compat(_KERAS_PATH)
-    logger.info("Keras model loaded.")
+    logger.info("Loading TFLite model...")
+    interp = Interpreter(model_path=str(_TFLITE_PATH))
+    interp.allocate_tensors()
+    _input_index = interp.get_input_details()[0]["index"]
+    _output_index = interp.get_output_details()[0]["index"]
+    _interpreter = interp
+    logger.info("TFLite model loaded.")
 
     meta = json.loads(_META_PATH.read_text())
     _labels = meta["labels"]
@@ -125,7 +84,10 @@ def predict(image_bgr: np.ndarray, top_n: int = 3) -> dict:
     if lm is None:
         return {"hand_found": False, "letter": None, "confidence": 0.0, "top": []}
 
-    probs = _model.predict(lm.reshape(1, -1), verbose=0)[0]
+    _interpreter.set_tensor(_input_index, lm.reshape(1, -1))
+    _interpreter.invoke()
+    probs = _interpreter.get_tensor(_output_index)[0]
+
     idx = int(np.argmax(probs))
     top_idx = np.argsort(probs)[::-1][:top_n]
 

@@ -50,8 +50,19 @@ docker-compose down
 El sistema expone una serie de endpoints para procesar las traducciones.
 
 ### Backend (Spring Boot - `:8080`)
-Este servicio actúa como gateway principal para las consultas de la aplicación.
-- **`POST /translate`**: Recibe el frame del frontend (imagen base64) y lo reenvía al AI Service para obtener la predicción.
+API Gateway con autenticación JWT, gestión de usuarios y almacenamiento de historial (H2 embebida — sin instalar nada).
+
+**Autenticación (pública)**
+- **`POST /auth/register`**: Registra un usuario. Body: `{ "email": "...", "password": "..." }`. Devuelve `{ "token": "<jwt>", "email": "..." }`.
+- **`POST /auth/login`**: Login con los mismos campos. Devuelve JWT.
+
+**Traducción (pública, sin login)**
+- **`GET /translate`**: Health check.
+- **`POST /translate`**: Recibe el frame (imagen base64) y lo reenvía al AI Service. Devuelve `{ "handFound": true, "letter": "A", "confidence": 0.97, "top": [...] }`.
+
+**Historial (requiere `Authorization: Bearer <token>`)**
+- **`POST /history`**: Guarda el texto acumulado de la sesión. Body: `{ "text": "HELLO WORLD" }`.
+- **`GET /history`**: Historial de textos guardados del usuario (más reciente primero).
 
 ### AI Service (Python/FastAPI - `:8000`)
 Motor de inferencia. Recibe una imagen de la mano, extrae landmarks con MediaPipe y clasifica la seña con la red neuronal.

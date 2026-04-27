@@ -1,19 +1,17 @@
-# Build-time environment para Node
-FROM node:18-alpine
-
+# Stage 1: Build
+FROM node:18-alpine AS builder
 WORKDIR /app
-
-# Copiar configuración de dependencias
 COPY package.json package-lock.json* ./
-
-# Instalar dependencias
 RUN npm install
-
-# Copiar el código fuente
+ARG VITE_API_URL=http://localhost:8080
+ENV VITE_API_URL=${VITE_API_URL}
 COPY . .
+RUN npm run build
 
-# Exponer el puerto de Vite
-EXPOSE 3000
-
-# Añadir el comando para que inicie la app escuchando globalmente
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+# Stage 2: Serve
+FROM nginx:1.27-alpine
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

@@ -1,10 +1,6 @@
 fastapi
 uvicorn[standard]
 mediapipe
-tensorflow>=2.16.0
+ai-edge-litert
 numpy
-opencv-python-headless
 pydantic
-pytest
-pytest-asyncio
-httpx
