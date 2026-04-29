@@ -2,6 +2,9 @@ package com.tuempresa.signlang.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,11 +20,13 @@ public class AiServiceClient {
     @Value("${ai.service.url}")
     private String aiServiceUrl;
 
-    @SuppressWarnings("unchecked")
     public Map<String, Object> predict(String imageDataUrl) {
         String url = aiServiceUrl + "/predict";
         Map<String, String> body = Map.of("image", imageDataUrl);
-        ResponseEntity<Map> response = restTemplate.postForEntity(url, body, Map.class);
+        ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+                url, HttpMethod.POST, new HttpEntity<>(body),
+                new ParameterizedTypeReference<>() {}
+        );
         return response.getBody();
     }
 }

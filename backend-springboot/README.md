@@ -116,13 +116,31 @@ cd backend-springboot
 
 ---
 
+## Integración con Frontend
+
+El frontend React envía los frames al endpoint `/translate`:
+
+```
+Browser (React) 
+  POST /translate { image: "data:image/jpeg;base64,..." }
+    ↓
+  Backend Spring Boot
+    └─ Valida JWT si es necesario (solo para /history)
+    └─ Reenvía a AI Service
+    └─ Devuelve { handFound, letter, confidence, top[] }
+```
+
+El backend también gestiona sesiones de usuario y guarda el historial de traducciones (`/history` POST/GET).
+
+---
+
 ## Tests
 
 ```bash
 ./mvnw test
 ```
 
-25 tests unitarios — resultado actual: **25/25 PASSED**.
+**25/25 tests pasando:**
 
 | Suite | Tests | Qué verifica |
 |---|---|---|

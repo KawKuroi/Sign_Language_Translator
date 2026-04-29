@@ -112,6 +112,16 @@ Letras soportadas: **A–Y** (J y Z excluidas por requerir movimiento).
 
 ---
 
+## Estado del Proyecto
+
+✅ **Frontend** — Implementación completa del design system Signa con React 18 + Tailwind CSS 3. Incluye rutas (Landing, Traductor, Historial, About, Auth), flujo de cámara en tiempo real, historial persistente con JWT, responsive desktop+mobile, y 50/50 tests pasando (vitest + Testing Library + MSW).
+
+✅ **Backend** — Spring Boot 3.1 con autenticación JWT, endpoints `/auth/**`, `/translate`, `/history`, H2 embebida. 25/25 tests pasando.
+
+✅ **AI Service** — FastAPI + MediaPipe + TFLite. Extracción de 21 landmarks, red neuronal densa (97% accuracy en validación), 5 tests cubriendo inferencia y errores.
+
+---
+
 ## Entrenamiento del Modelo
 
 El modelo fue entrenado en Google Colab. El notebook contiene el flujo completo: extracción de landmarks con MediaPipe y entrenamiento de la red densa.

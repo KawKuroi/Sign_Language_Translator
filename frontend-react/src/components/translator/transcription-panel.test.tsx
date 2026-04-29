@@ -1,10 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
+import type { ReactNode } from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TranscriptionPanel } from './transcription-panel';
 import { ToastProvider } from '@/components/ui/toast';
 
-function wrap(ui: React.ReactNode) {
+function wrap(ui: ReactNode) {
   return render(<ToastProvider>{ui}</ToastProvider>);
 }
 

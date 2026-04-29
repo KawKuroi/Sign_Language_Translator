@@ -35,6 +35,10 @@ public class TranslationController {
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
         }
 
+        if (aiResult == null) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
+        }
+
         boolean handFound = (Boolean) aiResult.getOrDefault("hand_found", false);
         String letter     = (String)  aiResult.get("letter");
         Double confidence = ((Number) aiResult.getOrDefault("confidence", 0.0)).doubleValue();

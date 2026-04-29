@@ -45,7 +45,7 @@ function AboutDesktop() {
         <div className="grid grid-cols-[1.4fr_1fr] gap-5">
           <div className="bg-surface border border-border rounded-20 p-9 grid grid-cols-[200px_1fr] gap-8 items-start">
             <div className="w-[200px] h-[200px] rounded-16 bg-surface2 border border-border flex items-center justify-center text-ink relative overflow-hidden">
-              <span className="font-serif italic text-130 leading-none tracking-tighter1 text-ink -mt-2" style={{ fontSize: 130 }}>
+              <span className="font-serif italic leading-none tracking-tighter1 text-ink -mt-2" style={{ fontSize: 130 }}>
                 k
               </span>
               <div className="absolute top-3 right-3 font-mono text-10 text-ink4 tracking-wide1">/01</div>

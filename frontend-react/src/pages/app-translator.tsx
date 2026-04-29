@@ -29,6 +29,7 @@ export default function AppTranslatorPage() {
   const [saving, setSaving] = useState(false);
 
   const translator = useTranslator({ webcamRef });
+  const { isActive, start, stop, engineStatus, error } = translator;
 
   const handleEnable = useCallback(async () => {
     setRequested(true);
@@ -54,19 +55,19 @@ export default function AppTranslatorPage() {
   }, [toast]);
 
   useEffect(() => {
-    if (permission === 'granted' && !translator.isActive && requested) {
-      translator.start();
+    if (permission === 'granted' && !isActive && requested) {
+      start();
     }
-    if (permission !== 'granted' && translator.isActive) {
-      translator.stop();
+    if (permission !== 'granted' && isActive) {
+      stop();
     }
-  }, [permission, translator, requested]);
+  }, [permission, isActive, requested, start, stop]);
 
   useEffect(() => {
-    if (translator.engineStatus === 'error' && translator.error) {
-      toast({ title: 'Error de traducción', description: translator.error, variant: 'error' });
+    if (engineStatus === 'error' && error) {
+      toast({ title: 'Error de traducción', description: error, variant: 'error' });
     }
-  }, [translator.engineStatus, translator.error, toast]);
+  }, [engineStatus, error, toast]);
 
   const handleSave = async () => {
     if (!translator.word) return;

@@ -1,6 +1,6 @@
 services:
   backend:
-    build: 
+    build:
       context: ./backend-springboot
       dockerfile: Dockerfile
     container_name: sign_lang_backend
@@ -10,6 +10,8 @@ services:
       - AI_SERVICE_URL=http://ai-service:8000
     ports:
       - "8080:8080"
+    volumes:
+      - db-data:/app/data
     networks:
       - app-network
     restart: unless-stopped
@@ -26,6 +28,12 @@ services:
     networks:
       - app-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
 
   frontend:
     build:
@@ -45,3 +53,6 @@ services:
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  db-data:

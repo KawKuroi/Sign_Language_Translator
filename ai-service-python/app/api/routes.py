@@ -10,6 +10,11 @@ from app.model import inference
 router = APIRouter()
 
 
+@router.get("/health")
+async def health():
+    return {"status": "ok"}
+
+
 class PredictRequest(BaseModel):
     image: str  # base64 data URL ("data:image/jpeg;base64,...") or raw base64 string
 
