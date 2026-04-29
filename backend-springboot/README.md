@@ -1,15 +1,19 @@
-# Sign Language Translation - Backend Service
+# Sign Language Translation — Backend
 
-Este módulo expone la API principal del sistema (Java con Spring Boot). Actúa como *API Gateway* interno gestionando la orquestación entre el frontend y el microservicio de IA, además de la gestión completa de usuarios, autenticación JWT y el historial de traducciones.
+API Gateway del sistema. Recibe frames del frontend, los reenvía al AI Service y devuelve la predicción. También gestiona autenticación JWT y el historial de traducciones por usuario.
 
-## Stack Tecnológico
+## Stack
 
-- **Java 17 & Spring Boot 3.1**: Estructura REST robusta y controladores.
-- **Spring Security 6**: Autenticación stateless con JWT y encriptación BCrypt.
-- **Spring Data JPA + H2**: Persistencia embebida, sin instalar base de datos externa.
-- **jjwt 0.11.5**: Generación y validación de tokens JWT (HS256).
-- **Maven**: Gestor de dependencias y empaquetado.
-- **Lombok**: Reducción de boilerplate.
+| Tecnología | Rol |
+|---|---|
+| **Java 17 + Spring Boot 3.1** | Estructura REST y controladores |
+| **Spring Security 6** | Autenticación stateless con JWT + BCrypt |
+| **Spring Data JPA + H2** | Persistencia embebida, sin base de datos externa |
+| **jjwt 0.11.5** | Generación y validación de tokens (HS256) |
+| **Maven** | Gestor de dependencias y empaquetado |
+| **Lombok** | Reducción de boilerplate |
+
+---
 
 ## Arquitectura de Paquetes
 
@@ -26,27 +30,33 @@ com.tuempresa.signlang/
   service/      AuthService, AiServiceClient, TranslationHistoryService
 ```
 
+---
+
 ## Variables de Entorno
 
 | Variable | Descripción | Default |
 |---|---|---|
-| `AI_SERVICE_URL` | URL del AI service Python | `http://localhost:8000` |
-| `JWT_SECRET` | Clave de firma de tokens (min. 32 chars) | valor local por defecto |
+| `AI_SERVICE_URL` | URL del AI Service Python | `http://localhost:8000` |
+| `JWT_SECRET` | Clave de firma JWT (mínimo 32 caracteres) | valor local por defecto |
 | `JWT_EXPIRATION_MS` | Duración del token en milisegundos | `86400000` (24 h) |
 
-## Base de Datos (H2 embebida — sin instalación)
+---
 
-Al arrancar, Spring crea automáticamente el fichero `data/signlangdb.mv.db` con las tablas `USERS` y `TRANSLATION_HISTORY`. Los datos persisten entre reinicios.
+## Base de Datos (H2 embebida)
 
-Consola web disponible en: `http://localhost:8080/h2-console`
+Spring crea automáticamente `data/signlangdb.mv.db` con las tablas `USERS` y `TRANSLATION_HISTORY`. Los datos persisten entre reinicios.
+
+Consola web: **http://localhost:8080/h2-console**
 - **JDBC URL**: `jdbc:h2:file:./data/signlangdb`
 - **User**: `sa` | **Password**: *(vacío)*
+
+---
 
 ## Endpoints
 
 ### Autenticación (pública)
 
-**`POST /auth/register`** — Registro de nuevo usuario
+**`POST /auth/register`**
 ```json
 // Body
 { "email": "user@example.com", "password": "miPassword123" }
@@ -54,7 +64,7 @@ Consola web disponible en: `http://localhost:8080/h2-console`
 { "token": "<jwt>", "email": "user@example.com" }
 ```
 
-**`POST /auth/login`** — Login
+**`POST /auth/login`**
 ```json
 // Body
 { "email": "user@example.com", "password": "miPassword123" }
@@ -66,7 +76,7 @@ Consola web disponible en: `http://localhost:8080/h2-console`
 
 **`GET /translate`** — Health check → `200 OK`
 
-**`POST /translate`** — Envía un frame al AI service y devuelve la predicción ASL
+**`POST /translate`** — Envía el frame al AI Service y devuelve la predicción ASL
 ```json
 // Body
 { "image": "data:image/jpeg;base64,..." }
@@ -76,7 +86,7 @@ Consola web disponible en: `http://localhost:8080/h2-console`
 
 ### Historial (requiere `Authorization: Bearer <token>`)
 
-**`POST /history`** — Guarda el texto acumulado de la sesión de señas
+**`POST /history`**
 ```json
 // Body
 { "text": "HELLO WORLD" }
@@ -93,34 +103,44 @@ Consola web disponible en: `http://localhost:8080/h2-console`
 ]
 ```
 
+---
+
 ## Desarrollo Local
 
-Requiere Java 17.
+Requiere Java 17+.
 
 ```bash
 cd backend-springboot
-./mvnw spring-boot:run   # Levanta en http://localhost:8080
+./mvnw spring-boot:run   # http://localhost:8080
 ```
 
-### Ejecutar Tests
+---
+
+## Tests
 
 ```bash
 ./mvnw test
 ```
 
-Cobertura de tests unitarios:
+25 tests unitarios — resultado actual: **25/25 PASSED**.
 
-| Clase | Qué testea |
-|---|---|
-| `JwtTokenProviderTest` | Generación, validación y expiración de tokens |
-| `AuthServiceTest` | Registro, login, email duplicado, credenciales incorrectas |
-| `AiServiceClientTest` | Llamada al AI service y manejo de errores de conexión |
-| `TranslationHistoryServiceTest` | Guardar y recuperar historial, usuario no encontrado |
-| `AuthControllerTest` | Endpoints `/auth/**` con MockMvc |
-| `TranslationControllerTest` | `POST /translate` público (sin JWT) con MockMvc |
-| `HistoryControllerTest` | Endpoints `/history` con `@WithMockUser` y sin autenticación |
+| Suite | Tests | Qué verifica |
+|---|---|---|
+| `JwtTokenProviderTest` | 5 | Generación, validación y expiración de tokens |
+| `AuthServiceTest` | 4 | Registro, login, email duplicado, credenciales incorrectas |
+| `AiServiceClientTest` | 2 | Llamada al AI Service y manejo de errores de conexión |
+| `TranslationHistoryServiceTest` | 3 | Guardar y recuperar historial, usuario no encontrado |
+| `AuthControllerTest` | 4 | Endpoints `/auth/**` con MockMvc |
+| `TranslationControllerTest` | 3 | `POST /translate` público (sin JWT) con MockMvc |
+| `HistoryControllerTest` | 4 | Endpoints `/history` con y sin autenticación |
+
+---
 
 ## Dockerización
+
+El `Dockerfile` usa un build multi-stage:
+1. **Stage `builder`** (`maven:3.9-eclipse-temurin-17-alpine`): descarga dependencias y compila el JAR.
+2. **Stage runtime** (`eclipse-temurin:17-jre-alpine`): solo el JRE + el JAR, sin Maven ni fuentes.
 
 ```bash
 docker build -t signlang-backend .

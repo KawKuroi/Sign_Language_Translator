@@ -1,32 +1,33 @@
-# Sign Language Translation - AI Microservice
+# Sign Language Translation — AI Service
 
-Motor de inferencia del sistema. Recibe una imagen de la mano desde el backend, extrae los 21 landmarks con MediaPipe y clasifica la seña ASL con una red neuronal densa entrenada (97.16% de accuracy).
+Motor de inferencia ASL. Recibe una imagen de la mano, extrae 21 landmarks con MediaPipe y clasifica la seña con una red neuronal densa (97 % de accuracy). El runtime no requiere TensorFlow — usa `ai-edge-litert`, el intérprete TFLite oficial de Google (~50 MB vs ~1.5 GB de TF).
 
-## Stack Tecnológico
-- **Python 3.10+**
-- **FastAPI & Uvicorn** — framework asíncrono y servidor ASGI.
-- **MediaPipe** — detección de landmarks de la mano (21 puntos).
-- **TensorFlow / Keras** — modelo de clasificación ASL.
-- **OpenCV** — decodificación de imágenes.
-- **Pydantic** — validación estricta del payload de entrada.
+## Stack
+
+| Librería | Rol |
+|---|---|
+| **FastAPI + Uvicorn** | Framework asíncrono y servidor ASGI |
+| **MediaPipe** | Detección de 21 landmarks de la mano |
+| **ai-edge-litert** | Runtime TFLite para inferencia (sin TensorFlow) |
+| **OpenCV** | Decodificación de imágenes (provisto por MediaPipe) |
+| **NumPy** | Normalización de landmarks |
+| **Pydantic** | Validación del payload de entrada |
 
 ---
 
-## Endpoint: `POST /predict`
+## Endpoint `POST /predict`
 
 ### Request
 
 ```json
-{
-  "image": "data:image/jpeg;base64,/9j/4AAQ..."
-}
+{ "image": "data:image/jpeg;base64,/9j/4AAQ..." }
 ```
 
 | Campo | Tipo | Descripción |
-|-------|------|-------------|
-| `image` | `string` | Imagen codificada en base64. Acepta data-URL (`data:image/jpeg;base64,...`) o base64 puro. Cualquier resolución es válida; MediaPipe normaliza internamente. |
+|---|---|---|
+| `image` | `string` | Imagen en base64. Acepta data-URL (`data:image/jpeg;base64,...`) o base64 puro. |
 
-### Response — mano detectada
+### Respuesta — mano detectada
 
 ```json
 {
@@ -34,37 +35,25 @@ Motor de inferencia del sistema. Recibe una imagen de la mano desde el backend, 
   "letter": "A",
   "confidence": 0.97,
   "top": [
-    {"letter": "A", "confidence": 0.97},
-    {"letter": "S", "confidence": 0.02},
-    {"letter": "E", "confidence": 0.01}
+    { "letter": "A", "confidence": 0.97 },
+    { "letter": "S", "confidence": 0.02 },
+    { "letter": "E", "confidence": 0.01 }
   ]
 }
 ```
 
-### Response — sin mano en la imagen
+### Respuesta — sin mano
 
 ```json
-{
-  "hand_found": false,
-  "letter": null,
-  "confidence": 0.0,
-  "top": []
-}
+{ "hand_found": false, "letter": null, "confidence": 0.0, "top": [] }
 ```
-
-| Campo | Tipo | Descripción |
-|-------|------|-------------|
-| `hand_found` | `bool` | `true` si MediaPipe detectó una mano. |
-| `letter` | `string \| null` | Letra ASL predicha, o `null` si no se detectó mano. |
-| `confidence` | `float` | Probabilidad de la predicción principal (0.0 – 1.0). |
-| `top` | `array` | Las 3 predicciones más probables con sus confianzas. |
 
 ### Errores
 
 | Código | Causa |
-|--------|-------|
-| `400` | Payload base64 inválido o imagen corrupta. |
-| `422` | Falta el campo `image` en el body. |
+|---|---|
+| `400` | Payload base64 inválido o imagen corrupta |
+| `422` | Falta el campo `image` en el body |
 
 ### Letras soportadas
 
@@ -72,58 +61,61 @@ Motor de inferencia del sistema. Recibe una imagen de la mano desde el backend, 
 A B C D E F G H I K L M N O P Q R S T U V W X Y
 ```
 
-> J y Z están excluidas porque requieren movimiento de mano (no son señas estáticas).
+> J y Z están excluidas porque requieren movimiento (señas dinámicas, no estáticas).
+
+Documentación interactiva: **http://localhost:8000/docs**
 
 ---
 
 ## Desarrollo Local
 
-1. Crear y activar un entorno virtual:
-   ```bash
-   python -m venv venv
-   # Windows
-   venv\Scripts\activate
-   # Linux/Mac
-   source venv/bin/activate
-   ```
-2. Instalar dependencias:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Levantar el servidor (el archivo `hand_landmarker.task` se descarga automáticamente en el primer arranque si no existe):
-   ```bash
-   uvicorn app.main:app --reload
-   ```
+Requiere Python 3.10+.
 
-Documentación interactiva disponible en:
-- **Swagger UI:** `http://localhost:8000/docs`
-- **ReDoc:** `http://localhost:8000/redoc`
+```bash
+cd ai-service-python
+python -m venv venv
+source venv/bin/activate          # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload     # http://localhost:8000
+```
+
+El archivo `hand_landmarker.task` ya está incluido en `app/model/`. Si no existe, se descarga automáticamente de Google CDN en el primer arranque.
 
 ---
 
 ## Tests
 
+Instala las dependencias de test (solo necesario en desarrollo local):
+
 ```bash
-cd ai-service-python
+pip install pytest pytest-asyncio httpx
 pytest tests/ -v
 ```
 
-Los tests cubren:
-- Imagen sin mano → `hand_found: false`
-- Base64 malformado → HTTP 400
-- Body sin campo `image` → HTTP 422
-- Esquema completo de la respuesta
-- Base64 puro (sin prefijo `data:...`) aceptado correctamente
+| Test | Qué verifica |
+|---|---|
+| `test_predict_no_hand` | Frame blanco → `hand_found: false` |
+| `test_predict_invalid_base64` | Base64 malformado → HTTP 400 |
+| `test_predict_missing_image_field` | Body sin campo `image` → HTTP 422 |
+| `test_predict_response_schema` | Respuesta tiene todos los campos con tipos correctos |
+| `test_predict_raw_base64_accepted` | Base64 puro (sin prefijo `data:...`) aceptado |
 
-> Los tests cargan el modelo real una sola vez por sesión gracias al fixture `scope="session"`. El primer run puede tardar ~10 s en cargar TensorFlow y MediaPipe.
+Los tests usan `ASGITransport` de httpx — no levantan servidor, cargan el modelo real en memoria una vez por sesión (`scope="session"`).
 
 ---
 
 ## Dockerización
 
-El `Dockerfile` descarga `hand_landmarker.task` en tiempo de build, por lo que no se necesita conexión a Internet en runtime.
+El `Dockerfile` usa un build **multi-stage**:
+
+1. **Stage `converter`** (`python:3.10-slim` + TensorFlow): convierte `asl_model.keras` → `asl_model.tflite`.
+2. **Stage runtime** (`python:3.10-slim` sin TensorFlow): instala `ai-edge-litert` + MediaPipe y copia el `.tflite` del stage anterior.
+
+TensorFlow solo existe durante el build y no llega a la imagen final, reduciendo el tamaño ~1.5 GB.
 
 ```bash
 docker build -t signlang-ai .
 docker run -p 8000:8000 signlang-ai
 ```
+
+> Se usa `--workers 1` porque el intérprete TFLite se guarda como singleton de módulo y no es fork-safe. Para escalar horizontalmente, usa réplicas de contenedor.

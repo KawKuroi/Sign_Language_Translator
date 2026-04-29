@@ -1,41 +1,76 @@
-# Sign Language Translation - Frontend UI
+# Sign Language Translation — Frontend
 
-Este es el módulo de interfaz de usuario para el Traductor de Lenguaje de Señas. Desarrollado en React.js con TypeScript, es la cara visible de la aplicación, responsable de interactuar con la cámara del usuario en el navegador y mostrar las traducciones en tiempo real o a demanda.
+Interfaz de usuario del traductor ASL. Accede a la webcam del navegador, captura frames cada 2 s y muestra la letra detectada con su porcentaje de confianza.
 
-## Stack Tecnológico
-- **React.js & TypeScript:** Estructura de componentes tipados y modularidad.
-- **react-webcam:** Captura de video eficiente desde el navegador.
-- **axios:** Cliente HTTP para la comunicación con el Backend.
+## Stack
+
+- **React 18 + TypeScript** — componentes tipados.
+- **Vite** — bundler y servidor de desarrollo.
+- **react-webcam** — captura de video desde el navegador.
+- **nginx:alpine** — sirve el build estático en producción (Docker).
+
+---
 
 ## Variables de Entorno
-Si corres este proyecto localmente, asegúrate de configurar el endpoint del backend:
-- `REACT_APP_API_URL`: URL del Backend (por defecto `http://localhost:8080`).
+
+La URL del backend se inyecta **en tiempo de build** mediante Vite:
+
+| Variable | Descripción | Default |
+|---|---|---|
+| `VITE_API_URL` | URL base del backend | `http://localhost:8080` |
+
+En desarrollo local, crea un archivo `.env.local` en `frontend-react/`:
+
+```env
+VITE_API_URL=http://localhost:8080
+```
+
+> En Docker la variable se pasa como `build arg` en `docker-compose.yml` y queda embebida en el bundle estático. No es una variable de entorno en runtime.
+
+---
 
 ## Flujo de datos
 
-Cada 2 000 ms el componente captura un frame del webcam, lo convierte a base64 y envía un `POST /translate` al backend con el payload:
-
-```json
-{ "image": "data:image/jpeg;base64,..." }
+```
+Webcam (frame cada 2 000 ms)
+  └─ base64 JPEG
+       └─ POST /translate → Backend :8080
+                                └─ { handFound, letter, confidence, top }
+                                         └─ TranslationBox (UI)
 ```
 
-El backend reenvía la imagen al AI Service y devuelve la predicción que se muestra en `TranslationBox`.
+---
 
-## Desarrollo Local (Independiente)
+## Desarrollo Local
 
-Para trabajar únicamente en el entorno visual sin Docker:
-1. Instalar dependencias:
-   ```bash
-   npm install
-   ```
-2. Ejecutar servidor de desarrollo:
-   ```bash
-   npm run dev
-   ```
+Requiere Node.js 18+.
+
+```bash
+cd frontend-react
+npm install
+npm run dev        # servidor en http://localhost:5173
+npm run build      # build de producción en dist/
+```
+
+---
 
 ## Dockerización
-Si deseas probar la imagen en solitario:
+
+El Dockerfile usa un build multi-stage:
+1. **Stage builder** (`node:18-alpine`): instala dependencias y ejecuta `npm run build`.
+2. **Stage serve** (`nginx:1.27-alpine`): sirve el contenido de `dist/` con SPA fallback.
+
 ```bash
-docker build -t signlang-frontend .
-docker run -p 3000:3000 -e REACT_APP_API_URL=http://localhost:8080 signlang-frontend
+# Build y run standalone
+docker build \
+  --build-arg VITE_API_URL=http://localhost:8080 \
+  -t signlang-frontend .
+
+docker run -p 80:80 signlang-frontend
 ```
+
+La UI queda disponible en **http://localhost** (puerto 80).
+
+### nginx — SPA fallback
+
+Todas las rutas desconocidas redirigen a `index.html` para que React Router funcione correctamente. Los assets estáticos (JS, CSS, imágenes) se sirven con caché de 1 año (`Cache-Control: public, immutable`).
