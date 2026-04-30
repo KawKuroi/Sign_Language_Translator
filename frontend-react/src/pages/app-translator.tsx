@@ -31,26 +31,24 @@ export default function AppTranslatorPage() {
   const translator = useTranslator({ webcamRef });
   const { isActive, start, stop, engineStatus, error } = translator;
 
-  const handleEnable = useCallback(async () => {
-    setRequested(true);
+  const handleEnable = useCallback(() => {
     if (!navigator.mediaDevices?.getUserMedia) {
       setPermission('error');
       toast({ title: 'Cámara no disponible', description: 'Tu navegador no soporta acceso a cámara.', variant: 'error' });
       return;
     }
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
-      stream.getTracks().forEach((t) => t.stop());
-      setPermission('granted');
-    } catch (err) {
-      const name = (err as DOMException)?.name;
-      if (name === 'NotAllowedError') {
-        setPermission('denied');
-        toast({ title: 'Permiso denegado', description: 'Habilita la cámara en la configuración del navegador.', variant: 'error' });
-      } else {
-        setPermission('error');
-        toast({ title: 'No se pudo acceder a la cámara', variant: 'error' });
-      }
+    setRequested(true);
+    setPermission('granted'); // let react-webcam handle the actual getUserMedia call
+  }, [toast]);
+
+  const handleUserMediaError = useCallback((err: string | DOMException) => {
+    const name = typeof err === 'string' ? err : err.name;
+    if (name === 'NotAllowedError' || name === 'PermissionDeniedError') {
+      setPermission('denied');
+      toast({ title: 'Permiso denegado', description: 'Habilita la cámara en la configuración del navegador.', variant: 'error' });
+    } else {
+      setPermission('error');
+      toast({ title: 'No se pudo acceder a la cámara', variant: 'error' });
     }
   }, [toast]);
 
@@ -109,6 +107,7 @@ export default function AppTranslatorPage() {
             currentLetter={translator.currentLetter}
             confidence={translator.confidence}
             onEnable={handleEnable}
+            onUserMediaError={handleUserMediaError}
             footer={
               permission === 'granted' && (
                 <div className="flex justify-center gap-2 pt-2">
@@ -152,6 +151,7 @@ export default function AppTranslatorPage() {
             currentLetter={translator.currentLetter}
             confidence={translator.confidence}
             onEnable={handleEnable}
+            onUserMediaError={handleUserMediaError}
             footer={
               permission === 'granted' && (
                 <div className="flex justify-center gap-2 pt-2">
