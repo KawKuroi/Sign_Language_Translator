@@ -97,7 +97,7 @@ Letras soportadas: **A–Y** (J y Z excluidas por requerir movimiento).
 
 | Capa | Stack |
 |---|---|
-| Frontend | React 18, TypeScript, Vite, react-webcam, nginx:alpine |
+| Frontend | React 18, TypeScript, Vite, Tailwind CSS 3, react-webcam, nginx:alpine |
 | Backend | Java 17, Spring Boot 3.1, Spring Security 6, JWT (jjwt), H2, Maven |
 | AI Service | Python 3.10, FastAPI, MediaPipe, ai-edge-litert (TFLite runtime), OpenCV, NumPy |
 | Infraestructura | Docker, Docker Compose |
