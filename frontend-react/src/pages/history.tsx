@@ -9,6 +9,12 @@ import { Button } from '@/components/ui/button';
 import { IcHistory } from '@/components/brand/icons';
 import { useIsMobile } from '@/hooks/use-media-query';
 import { historyApi, type HistoryItem } from '@/lib/api';
+import { localHistory } from '@/lib/local-history';
+import { useAuth } from '@/lib/auth';
+
+interface HistoryItemWithOrigin extends HistoryItem {
+  _origin: 'local' | 'remote';
+}
 
 function formatDate(iso: string): string {
   try {
@@ -24,7 +30,19 @@ function formatDate(iso: string): string {
   }
 }
 
-function HistoryList({ items, loading, error }: { items: HistoryItem[]; loading: boolean; error: string | null }) {
+function HistoryList({
+  items,
+  loading,
+  error,
+  onClearLocal,
+  hasLocal,
+}: {
+  items: HistoryItemWithOrigin[];
+  loading: boolean;
+  error: string | null;
+  onClearLocal: () => void;
+  hasLocal: boolean;
+}) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-16">
@@ -49,7 +67,7 @@ function HistoryList({ items, loading, error }: { items: HistoryItem[]; loading:
           Sin <span className="font-serif italic font-normal">traducciones</span>
         </h3>
         <p className="font-sans text-14 text-ink3 max-w-sm">
-          Cuando guardes una traducción aparecerá aquí, asociada a tu cuenta.
+          Cuando guardes una traducción aparecerá aquí.
         </p>
         <Link to="/app">
           <Button variant="primary" size="md">
@@ -60,50 +78,103 @@ function HistoryList({ items, loading, error }: { items: HistoryItem[]; loading:
     );
   }
   return (
-    <ul className="flex flex-col gap-2">
-      {items.map((item) => (
-        <li
-          key={item.id}
-          className="bg-surface border border-border rounded-12 p-4 flex items-center justify-between gap-4"
-        >
-          <div className="flex-1 min-w-0">
-            <p className="font-serif italic text-ink text-20 tracking-tight1 break-all">
-              {item.text}
-            </p>
-            <p className="font-mono text-10 text-ink4 mt-1 tracking-wide1">
-              {formatDate(item.savedAt)}
-            </p>
-          </div>
-        </li>
-      ))}
-    </ul>
+    <div className="flex flex-col gap-4">
+      {hasLocal && (
+        <div className="flex items-center justify-between">
+          <SectionLabel>Guardadas localmente</SectionLabel>
+          <Button variant="ghost" size="sm" onClick={onClearLocal}>
+            Limpiar locales
+          </Button>
+        </div>
+      )}
+      <ul className="flex flex-col gap-2">
+        {items.map((item) => (
+          <li
+            key={`${item._origin}-${item.id}`}
+            className="bg-surface border border-border rounded-12 p-4 flex items-center justify-between gap-4"
+          >
+            <div className="flex-1 min-w-0">
+              <p className="font-serif italic text-ink text-20 tracking-tight1 break-all">
+                {item.text}
+              </p>
+              <p className="font-mono text-10 text-ink4 mt-1 tracking-wide1">
+                {formatDate(item.savedAt)}
+              </p>
+            </div>
+            <span className="font-mono text-9 text-ink4 tracking-wide2 uppercase shrink-0">
+              {item._origin === 'local' ? 'local' : 'sync'}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
 export default function HistoryPage() {
   const isMobile = useIsMobile();
-  const [items, setItems] = useState<HistoryItem[]>([]);
+  const { user } = useAuth();
+  const [items, setItems] = useState<HistoryItemWithOrigin[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const loadItems = () => {
     let alive = true;
     setLoading(true);
+
+    const localItems: HistoryItemWithOrigin[] = localHistory.list().map((i) => ({
+      ...i,
+      _origin: 'local',
+    }));
+
+    if (!user) {
+      setItems(localItems);
+      setLoading(false);
+      return () => { alive = false; };
+    }
+
     historyApi
       .list()
-      .then((data) => {
-        if (alive) setItems(data);
+      .then((remoteItems) => {
+        if (!alive) return;
+        const remote: HistoryItemWithOrigin[] = remoteItems.map((i) => ({
+          ...i,
+          _origin: 'remote',
+        }));
+        const remoteKeys = new Set(remote.map((i) => `${i.text}|${i.savedAt}`));
+        const filteredLocal = localItems.filter(
+          (i) => !remoteKeys.has(`${i.text}|${i.savedAt}`),
+        );
+        const merged = [...remote, ...filteredLocal].sort((a, b) =>
+          b.savedAt.localeCompare(a.savedAt),
+        );
+        setItems(merged);
       })
       .catch(() => {
-        if (alive) setError('No se pudo cargar el historial.');
+        if (alive) {
+          setError('No se pudo cargar el historial del servidor.');
+          setItems(localItems);
+        }
       })
       .finally(() => {
         if (alive) setLoading(false);
       });
-    return () => {
-      alive = false;
-    };
-  }, []);
+
+    return () => { alive = false; };
+  };
+
+  useEffect(() => {
+    const cleanup = loadItems();
+    return cleanup;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  const handleClearLocal = () => {
+    localHistory.clear();
+    loadItems();
+  };
+
+  const hasLocal = items.some((i) => i._origin === 'local');
 
   if (isMobile) {
     return (
@@ -114,7 +185,13 @@ export default function HistoryPage() {
           <span className="font-mono text-10 text-ink4 tracking-wide1">{items.length} items</span>
         </div>
         <div className="flex-1 px-4 py-3 overflow-auto">
-          <HistoryList items={items} loading={loading} error={error} />
+          <HistoryList
+            items={items}
+            loading={loading}
+            error={error}
+            onClearLocal={handleClearLocal}
+            hasLocal={hasLocal}
+          />
         </div>
         <MobileBottomNav />
       </div>
@@ -127,7 +204,13 @@ export default function HistoryPage() {
       <main className="flex-1 flex flex-col overflow-hidden">
         <AppHeader title="Historial" />
         <div className="flex-1 p-6 overflow-auto bg-bg">
-          <HistoryList items={items} loading={loading} error={error} />
+          <HistoryList
+            items={items}
+            loading={loading}
+            error={error}
+            onClearLocal={handleClearLocal}
+            hasLocal={hasLocal}
+          />
         </div>
       </main>
     </div>

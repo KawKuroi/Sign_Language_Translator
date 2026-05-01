@@ -1,4 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { forwardRef, useEffect } from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
@@ -7,7 +8,13 @@ import { AuthProvider } from '@/lib/auth';
 import { ToastProvider } from '@/components/ui/toast';
 
 vi.mock('react-webcam', () => ({
-  default: vi.fn(() => null),
+  default: forwardRef(function MockWebcam({ onUserMediaError }: { onUserMediaError?: (e: unknown) => void }, _ref: unknown) {
+    useEffect(() => {
+      if (!navigator.mediaDevices?.getUserMedia) return;
+      navigator.mediaDevices.getUserMedia({ video: true }).catch((e) => onUserMediaError?.(e));
+    }, [onUserMediaError]);
+    return null;
+  }),
 }));
 
 function renderApp() {

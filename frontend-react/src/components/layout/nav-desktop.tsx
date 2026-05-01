@@ -50,14 +50,6 @@ export function NavDesktop({ dark = false }: NavDesktopProps) {
         })}
       </div>
       <div className="flex items-center gap-3">
-        <span
-          className={cn(
-            'font-mono text-11 tracking-wide1',
-            dark ? 'text-white/60' : 'text-ink3',
-          )}
-        >
-          v2.0
-        </span>
         <Button size="md" variant={dark ? 'white' : 'primary'} onClick={() => navigate('/app')}>
           Empezar
         </Button>

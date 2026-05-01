@@ -12,6 +12,7 @@ const badgeStyles = cva(
         mono: 'bg-surface text-ink3 border border-border',
         outline_white: 'bg-transparent text-white/85 border border-white/20',
         ok: 'bg-ok/15 text-ok',
+        outline: 'bg-transparent text-ink2 border border-border',
       },
     },
     defaultVariants: { variant: 'dark' },

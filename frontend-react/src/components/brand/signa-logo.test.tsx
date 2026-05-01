@@ -14,8 +14,8 @@ describe('SignaLogo', () => {
     expect(span.className).toMatch(/font-sans/);
   });
 
-  it('MarkSigna renders the SVG mark', () => {
+  it('MarkSigna renders the icon image', () => {
     const { container } = render(<MarkSigna size={40} />);
-    expect(container.querySelector('svg')).toBeTruthy();
+    expect(container.querySelector('img')).toBeTruthy();
   });
 });

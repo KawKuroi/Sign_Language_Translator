@@ -1,173 +1,234 @@
+import { useState, type FormEvent, type ReactNode } from 'react';
 import { NavDesktop } from '@/components/layout/nav-desktop';
 import { FooterDesktop } from '@/components/layout/footer-desktop';
-import { Button } from '@/components/ui/button';
 import { SectionLabel } from '@/components/ui/section-label';
+import { Button } from '@/components/ui/button';
+import { Divider } from '@/components/ui/divider';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card } from '@/components/ui/card';
 import { IcGithub, IcLink, IcSend } from '@/components/brand/icons';
+import { useToast } from '@/components/ui/toast';
 import { useIsMobile } from '@/hooks/use-media-query';
 import { MobileHeader } from '@/components/layout/mobile-header';
 import { MobileBottomNav } from '@/components/layout/mobile-bottomnav';
 
-const stack = [
-  { tag: 'Frontend', stack: 'React + TypeScript', desc: 'Cliente que captura los frames y muestra la transcripción en vivo.' },
-  { tag: 'Gateway', stack: 'Spring Boot · Java', desc: 'API gateway con auth JWT, gestión de usuarios y persistencia del historial.' },
-  { tag: 'AI Service', stack: 'FastAPI · Python', desc: 'Inferencia con MediaPipe + red neuronal densa entrenada sobre 24 letras del ASL.' },
+const GITHUB_URL = 'https://github.com/KawKuroi';
+
+const GRID_BG = {
+  backgroundImage:
+    'linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px)',
+  backgroundSize: '36px 36px',
+};
+
+function Pill({
+  children,
+  href,
+  dark = false,
+  icon,
+}: {
+  children: ReactNode;
+  href?: string;
+  dark?: boolean;
+  icon?: ReactNode;
+}) {
+  const cls = dark
+    ? 'inline-flex items-center gap-[6px] px-3 py-[5px] rounded-full bg-white/10 border border-white/15 font-mono text-11 text-white/80 hover:bg-white/15 transition-colors'
+    : 'inline-flex items-center gap-[6px] px-3 py-[5px] rounded-full bg-surface border border-border font-mono text-11 text-ink2 hover:bg-surface2 transition-colors';
+
+  if (href) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
+        {icon}
+        {children}
+      </a>
+    );
+  }
+  return <span className={cls}>{icon}{children}</span>;
+}
+
+const stackCards = [
+  { tag: 'Frontend', stack: 'React + TypeScript', desc: 'Cliente que captura los frames de la cámara y muestra la transcripción en vivo.' },
+  { tag: 'Gateway', stack: 'Spring Boot · Java', desc: 'API gateway con autenticación JWT, gestión de usuarios y persistencia del historial.' },
+  { tag: 'AI Service', stack: 'FastAPI · Python', desc: 'Inferencia con MediaPipe + red neuronal densa entrenada sobre 24 letras del alfabeto ASL.' },
 ];
+
+function ContactForm() {
+  const { toast } = useToast();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [sending, setSending] = useState(false);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    setSending(true);
+    setTimeout(() => {
+      toast({ title: 'Mensaje enviado', description: 'Gracias por escribir. Responderé pronto.', variant: 'success' });
+      setName('');
+      setEmail('');
+      setMessage('');
+      setSending(false);
+    }, 600);
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="bg-surface border border-border rounded-16 p-7 flex flex-col gap-4"
+    >
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-[6px]">
+          <Label className="font-mono text-10 text-ink4 tracking-wide2 uppercase">Nombre</Label>
+          <Input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Juan García"
+            required
+          />
+        </div>
+        <div className="flex flex-col gap-[6px]">
+          <Label className="font-mono text-10 text-ink4 tracking-wide2 uppercase">Correo</Label>
+          <Input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="juan@ejemplo.com"
+            required
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-[6px]">
+        <Label className="font-mono text-10 text-ink4 tracking-wide2 uppercase">Mensaje</Label>
+        <textarea
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="¿Cómo podemos mejorar?"
+          required
+          rows={5}
+          className="w-full rounded-8 border border-border bg-bg px-4 py-3 font-sans text-14 text-ink placeholder:text-ink4 focus:outline-none focus:ring-2 focus:ring-ink focus:ring-offset-1 resize-none"
+        />
+      </div>
+      <div>
+        <Button type="submit" variant="primary" icon={<IcSend s={13} w={1.6} />} disabled={sending}>
+          {sending ? 'Enviando…' : 'Enviar mensaje'}
+        </Button>
+      </div>
+    </form>
+  );
+}
 
 function AboutDesktop() {
   return (
-    <div className="bg-bg font-sans">
+    <div className="bg-bg font-sans w-full">
       <NavDesktop />
 
-      <section className="px-20 pt-24 pb-16 grid grid-cols-2 gap-20 items-end">
+      {/* Quién está detrás */}
+      <section className="px-20 pt-20 pb-14 grid grid-cols-2 gap-16 items-end">
         <div>
           <SectionLabel>·01 · Quién está detrás</SectionLabel>
-          <h1 className="font-sans text-80 font-semibold text-ink mt-5 leading-[0.95] tracking-tightest">
+          <h1 className="font-sans text-72 font-semibold text-ink leading-[0.95] tracking-tightest mt-4">
             Un proyecto<br />
-            <span className="font-serif italic font-normal">en solitario</span>.
+            <span className="font-serif italic font-normal">en solitario.</span>
           </h1>
         </div>
-        <p className="font-sans text-17 text-ink2 leading-[1.6] max-w-md">
-          Signa nació como un experimento personal sobre cómo la IA puede acortar distancias. Lo
-          construyo en mis horas libres, con Claude Code como copiloto, y con la convicción de que
-          la accesibilidad no debería esperar a tener un equipo grande detrás.
+        <p className="font-sans text-16 text-ink2 leading-[1.65]">
+          Signa nació como un experimento personal sobre cómo la IA puede acortar distancias.
+          Lo construyo en mis horas libres, con Claude Code como copiloto, y con la convicción
+          de que la accesibilidad no debería esperar a tener un equipo grande detrás.
         </p>
       </section>
 
-      <section className="px-20 pb-24">
-        <div className="border-t border-border pt-8 flex items-center justify-between mb-10">
-          <h2 className="font-sans text-18 font-semibold text-ink tracking-tight1">El equipo</h2>
-          <SectionLabel>1 humano · 1 ia</SectionLabel>
+      <Divider className="mx-20" />
+
+      {/* El equipo */}
+      <section className="px-20 py-14">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="font-sans text-22 font-semibold text-ink tracking-tight1">El equipo</h2>
+          <SectionLabel>1 humano · 1 IA</SectionLabel>
         </div>
 
-        <div className="grid grid-cols-[1.4fr_1fr] gap-5">
-          <div className="bg-surface border border-border rounded-20 p-9 grid grid-cols-[200px_1fr] gap-8 items-start">
-            <div className="w-[200px] h-[200px] rounded-16 bg-surface2 border border-border flex items-center justify-center text-ink relative overflow-hidden">
-              <span className="font-serif italic leading-none tracking-tighter1 text-ink -mt-2" style={{ fontSize: 130 }}>
-                k
-              </span>
-              <div className="absolute top-3 right-3 font-mono text-10 text-ink4 tracking-wide1">/01</div>
+        <div className="grid grid-cols-2 gap-5">
+          {/* Card humano */}
+          <div className="bg-surface border border-border rounded-16 p-7 flex gap-7">
+            <div className="w-[180px] h-[180px] rounded-12 bg-bg border border-border flex items-center justify-center relative shrink-0 overflow-hidden">
+              <span className="font-serif italic text-[100px] text-ink leading-none select-none">k</span>
+              <span className="absolute top-3 right-3 font-mono text-10 text-ink4">/01</span>
             </div>
-            <div className="pt-1">
-              <SectionLabel>Founder · Engineer · Designer</SectionLabel>
-              <h3 className="font-sans text-32 font-semibold text-ink mt-3 mb-1 tracking-tighter1 leading-[1.05]">
+            <div className="flex-1 min-w-0">
+              <SectionLabel className="mb-2">Founder · Engineer · Designer</SectionLabel>
+              <h3 className="font-sans text-26 font-semibold text-ink tracking-tight1">
                 Kaw<span className="font-serif italic font-normal">Kuroi</span>
               </h3>
-              <p className="font-mono text-12 text-ink4 mb-5 tracking-wide1">@kawkuroi</p>
-              <p className="font-sans text-14 text-ink3 leading-[1.6] mb-6">
-                Diseño, desarrollo y entreno los modelos. Cada decisión —desde la arquitectura de
-                microservicios hasta el placement de un botón— pasa por mis manos.
+              <p className="font-mono text-11 text-ink4 mb-4">@kawkuroi</p>
+              <p className="font-sans text-14 text-ink3 leading-[1.6] mb-5">
+                Diseño, desarrollo y entreno los modelos. Cada decisión —desde la arquitectura
+                de microservicios hasta el placement de un botón— pasa por mis manos.
               </p>
-              <div className="flex gap-2">
-                <Button variant="secondary" size="sm" icon={<IcGithub s={14} />}>
+              <div className="flex gap-2 flex-wrap">
+                <Pill href={GITHUB_URL} icon={<IcGithub s={11} />}>
                   github.com/KawKuroi
-                </Button>
-                <Button variant="ghost" size="sm" icon={<IcLink s={13} w={1.6} />}>
+                </Pill>
+                <Pill href="#" icon={<IcLink s={11} w={1.5} />}>
                   Portfolio
-                </Button>
+                </Pill>
               </div>
             </div>
           </div>
 
-          <div className="bg-black text-white rounded-20 p-9 flex flex-col justify-between relative overflow-hidden">
-            <div
-              aria-hidden="true"
-              className="absolute inset-0"
-              style={{
-                backgroundImage:
-                  'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)',
-                backgroundSize: '40px 40px',
-                maskImage: 'radial-gradient(ellipse at 70% 30%, black 0%, transparent 70%)',
-              }}
-            />
-            <div className="relative">
-              <div className="flex items-center justify-between mb-7">
-                <span className="font-mono text-10 text-white/50 tracking-wide2 uppercase">
-                  Pair programmer · IA
-                </span>
-                <span className="font-mono text-10 text-white/40 tracking-wide1">/02</span>
-              </div>
-              <h3 className="font-sans text-32 font-semibold text-white mb-4 tracking-tighter1 leading-[1.05]">
-                Claude <span className="font-serif italic font-normal">Code</span>
-              </h3>
-              <p className="font-sans text-14 text-white/70 leading-[1.6]">
-                Mi colaborador en arquitectura, refactors y debugging. Acelera lo que sería
-                imposible solo, manteniéndome a cargo de cada decisión de producto.
-              </p>
+          {/* Card IA */}
+          <div className="bg-black text-white rounded-16 p-7 flex flex-col" style={GRID_BG}>
+            <div className="flex justify-between items-start mb-4">
+              <SectionLabel className="text-white/50">Pair Programmer · IA</SectionLabel>
+              <span className="font-mono text-10 text-white/30">/02</span>
             </div>
-            <div className="relative flex gap-2 mt-7">
-              <span className="font-mono text-10 px-[10px] py-[5px] rounded-full border border-white/20 text-white/70 tracking-wide1">
-                Anthropic
-              </span>
-              <span className="font-mono text-10 px-[10px] py-[5px] rounded-full border border-white/20 text-white/70 tracking-wide1">
-                Opus 4.7
-              </span>
+            <h3 className="font-sans text-32 font-semibold text-white tracking-tight1 mb-3">
+              Claude <span className="font-serif italic font-normal">Code</span>
+            </h3>
+            <p className="font-sans text-14 text-white/70 leading-[1.6] mb-auto">
+              Mi colaborador en arquitectura, refactors y debugging. Acelera lo que sería
+              imposible solo, manteniéndome a cargo de cada decisión de producto.
+            </p>
+            <div className="flex gap-2 mt-6 flex-wrap">
+              <Pill dark>Anthropic</Pill>
+              <Pill dark>Sonnet 4.5</Pill>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="px-20 pb-24">
+      {/* Tres servicios */}
+      <section className="px-20 pb-20">
         <SectionLabel>·02 · Cómo se construye</SectionLabel>
-        <h2 className="font-sans text-48 font-semibold text-ink mt-3 mb-14 tracking-tighter2 leading-[1.05] max-w-2xl">
+        <h2 className="font-sans text-48 font-semibold text-ink mt-3 mb-12 tracking-tighter2 leading-[1.05]">
           Tres servicios, <span className="font-serif italic font-normal">una idea</span>
         </h2>
         <div className="grid grid-cols-3 border border-border rounded-16 overflow-hidden">
-          {stack.map((s, i) => (
-            <div
-              key={s.tag}
-              className={`p-9 bg-surface ${i < 2 ? 'border-r border-border' : ''}`}
-            >
+          {stackCards.map((s, i) => (
+            <div key={s.tag} className={`p-9 bg-surface ${i < 2 ? 'border-r border-border' : ''}`}>
               <div className="flex items-center justify-between mb-7">
                 <SectionLabel emphasized>{s.tag}</SectionLabel>
                 <span className="font-mono text-10 text-ink4 tracking-wide1">0{i + 1}</span>
               </div>
-              <h3 className="font-sans text-20 font-semibold text-ink mb-2 tracking-tight1">
-                {s.stack}
-              </h3>
+              <h3 className="font-sans text-20 font-semibold text-ink mb-2 tracking-tight1">{s.stack}</h3>
               <p className="font-sans text-14 text-ink3 leading-[1.6]">{s.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="px-20 pb-24 grid grid-cols-[320px_1fr] gap-20">
+      {/* Contacto */}
+      <section className="px-20 pb-24 grid grid-cols-2 gap-16 items-start">
         <div>
           <SectionLabel>·03 · Contacto</SectionLabel>
-          <h2 className="font-sans text-36 font-semibold text-ink mt-3 mb-4 tracking-tighter2 leading-[1.05]">
+          <h2 className="font-sans text-44 font-semibold text-ink mt-3 tracking-tighter2 leading-[1.05]">
             Retroalimenta<span className="font-serif italic font-normal">ción</span>
           </h2>
-          <p className="font-sans text-14 text-ink3 leading-[1.6]">
+          <p className="font-sans text-15 text-ink3 mt-4 leading-[1.6] max-w-sm">
             Tu opinión me ayuda a mejorar Signa. ¿Tienes una sugerencia, encontraste un bug o
             quieres saludar? Escríbeme.
           </p>
         </div>
-        <Card className="p-8">
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div>
-              <Label htmlFor="contact-name">Nombre</Label>
-              <Input id="contact-name" placeholder="Juan García" />
-            </div>
-            <div>
-              <Label htmlFor="contact-email">Correo</Label>
-              <Input id="contact-email" type="email" placeholder="juan@ejemplo.com" />
-            </div>
-          </div>
-          <div className="mb-5">
-            <Label htmlFor="contact-msg">Mensaje</Label>
-            <textarea
-              id="contact-msg"
-              rows={4}
-              placeholder="¿Cómo podemos mejorar?"
-              className="w-full px-[14px] py-3 border border-border rounded-8 bg-bg font-sans text-14 text-ink outline-none resize-y"
-            />
-          </div>
-          <Button variant="primary" size="md" icon={<IcSend s={14} w={1.7} />}>
-            Enviar mensaje
-          </Button>
-        </Card>
+        <ContactForm />
       </section>
 
       <FooterDesktop />
@@ -177,72 +238,60 @@ function AboutDesktop() {
 
 function AboutMobile() {
   return (
-    <div className="flex flex-col min-h-screen bg-bg">
+    <div className="flex flex-col h-screen bg-bg overflow-hidden">
       <MobileHeader />
-      <main className="flex-1 px-5 py-8 flex flex-col gap-10 overflow-auto">
-        <section>
-          <SectionLabel>·01 · Quién</SectionLabel>
-          <h1 className="font-sans text-44 font-semibold text-ink mt-3 leading-[0.98] tracking-tightest">
+      <div className="flex-1 overflow-auto">
+        <section className="px-5 pt-8 pb-6">
+          <SectionLabel>·01 · Quién está detrás</SectionLabel>
+          <h1 className="font-sans text-40 font-semibold text-ink leading-[0.95] tracking-tightest mt-4 mb-4">
             Un proyecto<br />
-            <span className="font-serif italic font-normal">en solitario</span>.
+            <span className="font-serif italic font-normal">en solitario.</span>
           </h1>
-          <p className="font-sans text-15 text-ink2 leading-[1.55] mt-5">
-            Signa nació como un experimento personal sobre cómo la IA puede acortar distancias.
+          <p className="font-sans text-15 text-ink2 leading-[1.6]">
+            Signa nació como un experimento personal. Lo construyo con Claude Code como copiloto,
+            convencido de que la accesibilidad no debería esperar un equipo grande.
           </p>
         </section>
 
-        <section>
-          <SectionLabel>·02 · Equipo</SectionLabel>
-          <Card className="mt-3 p-6">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-16 h-16 rounded-12 bg-surface2 border border-border flex items-center justify-center">
-                <span className="font-serif italic text-32 text-ink leading-none">k</span>
-              </div>
-              <div>
-                <h3 className="font-sans text-20 font-semibold text-ink tracking-tight1">
-                  Kaw<span className="font-serif italic font-normal">Kuroi</span>
-                </h3>
-                <p className="font-mono text-11 text-ink4 tracking-wide1">@kawkuroi</p>
-              </div>
-            </div>
-            <p className="font-sans text-13 text-ink3 leading-[1.55]">
+        <Divider className="mx-5" />
+
+        <section className="px-5 py-8 flex flex-col gap-4">
+          <div className="flex justify-between mb-1">
+            <h2 className="font-sans text-18 font-semibold text-ink">El equipo</h2>
+            <SectionLabel>1 humano · 1 IA</SectionLabel>
+          </div>
+          <div className="bg-surface border border-border rounded-12 p-5">
+            <SectionLabel className="mb-2">Founder · Engineer · Designer</SectionLabel>
+            <h3 className="font-sans text-22 font-semibold text-ink mt-1">
+              Kaw<span className="font-serif italic font-normal">Kuroi</span>
+            </h3>
+            <p className="font-mono text-10 text-ink4 mb-3">@kawkuroi</p>
+            <p className="font-sans text-13 text-ink3 leading-[1.5] mb-4">
               Diseño, desarrollo y entreno los modelos.
             </p>
-          </Card>
-          <div className="bg-black text-white rounded-16 p-6 mt-3">
-            <span className="font-mono text-10 text-white/50 uppercase tracking-wide2">
-              Pair programmer · IA
-            </span>
-            <h3 className="font-sans text-22 font-semibold mt-3 tracking-tighter1">
+            <Pill href={GITHUB_URL} icon={<IcGithub s={11} />}>github.com/KawKuroi</Pill>
+          </div>
+          <div className="bg-black text-white rounded-12 p-5" style={GRID_BG}>
+            <SectionLabel className="text-white/50 mb-2">Pair Programmer · IA</SectionLabel>
+            <h3 className="font-sans text-22 font-semibold text-white">
               Claude <span className="font-serif italic font-normal">Code</span>
             </h3>
-            <p className="font-sans text-13 text-white/70 mt-2 leading-[1.55]">
+            <p className="font-sans text-13 text-white/70 leading-[1.5] mt-2 mb-4">
               Mi colaborador en arquitectura, refactors y debugging.
             </p>
+            <div className="flex gap-2">
+              <Pill dark>Anthropic</Pill>
+              <Pill dark>Sonnet 4.5</Pill>
+            </div>
           </div>
         </section>
-
-        <section>
-          <SectionLabel>·03 · Stack</SectionLabel>
-          <div className="mt-3 flex flex-col gap-2">
-            {stack.map((s) => (
-              <Card key={s.tag} className="p-5">
-                <SectionLabel emphasized>{s.tag}</SectionLabel>
-                <h3 className="font-sans text-16 font-semibold text-ink mt-2 tracking-tight1">
-                  {s.stack}
-                </h3>
-                <p className="font-sans text-13 text-ink3 leading-[1.5] mt-1">{s.desc}</p>
-              </Card>
-            ))}
-          </div>
-        </section>
-      </main>
+      </div>
       <MobileBottomNav />
     </div>
   );
 }
 
-export default function AboutPage() {
+export default function AboutPage(): ReactNode {
   const isMobile = useIsMobile();
   return isMobile ? <AboutMobile /> : <AboutDesktop />;
 }

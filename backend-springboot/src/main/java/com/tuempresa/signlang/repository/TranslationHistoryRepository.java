@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface TranslationHistoryRepository extends JpaRepository<TranslationHistory, Long> {
     List<TranslationHistory> findByUserOrderBySavedAtDesc(User user);
+    void deleteByUser(User user);
 }

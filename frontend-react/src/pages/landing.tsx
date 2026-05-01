@@ -11,14 +11,20 @@ import {
   IcArrowRight,
   IcBolt,
   IcCamera,
+  IcCode,
   IcEye,
+  IcGithub,
   IcLock,
   IcMenu,
   IcPlay,
   IcSparkle,
+  IcUsers,
 } from '@/components/brand/icons';
+import { useToast } from '@/components/ui/toast';
 import { useIsMobile } from '@/hooks/use-media-query';
 import { useState, type ReactNode } from 'react';
+
+const GITHUB_URL = 'https://github.com/KawKuroi';
 
 function HeroPreview() {
   return (
@@ -33,25 +39,35 @@ function HeroPreview() {
         <span className="w-[5px] h-[5px] rounded-full bg-ok pulse-dot" />
         <span className="font-mono text-9 font-medium text-white tracking-wide3">EN VIVO</span>
       </div>
+      <div className="absolute top-3 right-3">
+        <span className="font-mono text-9 text-white/40 tracking-wide1">42.331 / -71.028</span>
+      </div>
       <div className="absolute bottom-3 left-3 right-3 bg-black/70 backdrop-blur-lg border border-white/8 rounded-8 px-[14px] py-[10px]">
-        <p className="font-mono text-9 text-white/50 mb-1 tracking-wide3">TRADUCCIÓN · ASL → ES</p>
+        <div className="flex justify-between items-start">
+          <p className="font-mono text-9 text-white/50 mb-1 tracking-wide3">TRADUCCIÓN · ASL → ES</p>
+          <span className="font-mono text-9 text-white/40">00:42</span>
+        </div>
         <p className="font-serif italic font-normal text-17 text-white">"H – E – L – L – O"</p>
       </div>
     </div>
   );
 }
 
+function Metric({ value, label }: { value: string; label: string }) {
+  return (
+    <div>
+      <p className="font-serif italic font-normal text-26 text-ink leading-none">{value}</p>
+      <p className="font-mono text-10 text-ink4 tracking-wide2 mt-1 uppercase">{label}</p>
+    </div>
+  );
+}
+
 const features = [
-  { Icon: IcBolt, title: 'Precisión Instantánea', desc: 'MediaPipe extrae 21 puntos clave por mano cuadro a cuadro, con inferencia en menos de 100 ms.' },
-  { Icon: IcLock, title: 'Privacidad Total', desc: 'Los frames se descartan tras la inferencia. Solo el texto traducido se guarda.' },
-  { Icon: IcEye, title: 'Diseño Inclusivo', desc: 'Pensado para acortar la distancia entre la comunidad sorda y los oyentes.' },
+  { Icon: IcBolt, title: 'Precisión Instantánea', desc: 'Algoritmos optimizados para capturar cada microgesto con exactitud sub-milimétrica.' },
+  { Icon: IcLock, title: 'Privacidad por diseño', desc: 'Sin almacenar frames. Solo el texto traducido se guarda, autenticado por JWT. Sin terceros, sin trackers.' },
+  { Icon: IcEye, title: 'Diseño Inclusivo', desc: 'Interfaz minimalista construida con la comunidad y para la comunidad.' },
 ];
 
-const stack = [
-  { tag: 'Frontend', stack: 'React + TypeScript', desc: 'Cliente que captura los frames y muestra la transcripción en vivo.' },
-  { tag: 'Gateway', stack: 'Spring Boot · Java', desc: 'API gateway con auth JWT, gestión de usuarios y persistencia del historial.' },
-  { tag: 'AI Service', stack: 'FastAPI · Python', desc: 'Inferencia con MediaPipe + red neuronal densa entrenada sobre 24 letras del ASL.' },
-];
 
 const faqs = [
   {
@@ -92,26 +108,73 @@ function FAQItem({ q, a }: { q: string; a: string }) {
   );
 }
 
+function DemoSection() {
+  const { toast } = useToast();
+  return (
+    <section className="px-20 pb-20">
+      <div className="grid grid-cols-2 gap-20 mb-12 items-end">
+        <div>
+          <SectionLabel>·01 · DEMO</SectionLabel>
+          <h2 className="font-sans text-48 font-semibold text-ink mt-3 tracking-tighter2 leading-[1.05]">
+            Mira Signa <span className="font-serif italic font-normal">en acción</span>
+          </h2>
+        </div>
+        <p className="font-sans text-16 text-ink2 leading-[1.6]">
+          Observa cómo nuestra tecnología procesa gestos complejos y los convierte en texto o voz
+          instantáneamente.
+        </p>
+      </div>
+
+      <div
+        className="relative w-full rounded-16 overflow-hidden bg-black flex items-center justify-center"
+        style={{ aspectRatio: '16/9' }}
+      >
+        <button
+          type="button"
+          aria-label="Reproducir demo"
+          onClick={() => toast({ title: 'Demo próximamente', description: 'El vídeo de demo estará disponible pronto.' })}
+          className="w-20 h-20 rounded-full bg-white flex items-center justify-center hover:scale-105 transition-transform"
+        >
+          <IcPlay s={28} />
+        </button>
+        <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3">
+          <span className="font-mono text-11 text-white/60">02:14</span>
+          <div className="flex-1 h-[2px] bg-white/10 relative rounded-full">
+            <div className="absolute left-0 top-0 h-full bg-white/60 rounded-full" style={{ width: '44%' }} />
+          </div>
+          <span className="font-mono text-11 text-white/60">05:00</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function LandingDesktop() {
   return (
     <div className="bg-bg font-sans w-full">
       <NavDesktop />
 
-      <section className="px-20 pt-24 pb-20">
-        <div className="grid grid-cols-2 gap-20 items-end">
+      {/* Hero */}
+      <section className="px-20 pt-24 pb-16">
+        <div className="grid grid-cols-2 gap-16 items-center">
           <div>
-            <Badge variant="dark" className="mb-6">
-              <IcSparkle s={11} w={1.7} /> IA Generativa
-            </Badge>
-            <h1 className="font-sans text-80 font-semibold text-ink leading-[0.95] tracking-tightest">
-              Rompiendo barreras<br />
-              con <span className="font-serif italic font-normal">signa</span>
+            <div className="flex gap-2 mb-6">
+              <Badge variant="dark">
+                <IcSparkle s={11} w={1.7} /> IA Generativa
+              </Badge>
+              <Badge variant="outline">
+                <IcCode s={11} w={1.7} /> Open Source
+              </Badge>
+            </div>
+            <h1 className="font-sans text-72 font-semibold text-ink leading-[0.95] tracking-tightest mb-6">
+              Rompiendo<br />
+              barreras con<br />
+              <span className="font-serif italic font-normal">signa</span>
             </h1>
-          </div>
-          <div>
-            <p className="font-sans text-17 text-ink2 leading-[1.6] mb-8 max-w-md">
-              Traducción del alfabeto del Lenguaje de Señas Americano en tiempo real con inteligencia
-              artificial. Open-source, accesible y diseñado para la comunidad.
+            <p className="font-sans text-16 text-ink2 leading-[1.6] mb-8 max-w-md">
+              Traducción del alfabeto de Lenguaje de Señas Americano (ASL) en tiempo real con visión
+              computacional. Una herramienta para conectar mundos de forma fluida, accesible y sin
+              intermediarios.
             </p>
             <div className="flex gap-3">
               <Link to="/app">
@@ -119,21 +182,52 @@ function LandingDesktop() {
                   Comenzar ahora
                 </Button>
               </Link>
-              <Button size="lg" variant="secondary" icon={<IcPlay s={11} />}>
+              <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" variant="secondary" icon={<IcGithub s={16} />}>
+                  GitHub
+                </Button>
+              </a>
+              <Button size="lg" variant="ghost" icon={<IcPlay s={11} />}>
                 Ver demo
               </Button>
             </div>
           </div>
+          <div>
+            <HeroPreview />
+          </div>
         </div>
-        <div className="mt-16 max-w-4xl mx-auto">
-          <HeroPreview />
+
+        <Divider className="mt-14 mb-8" />
+        <div className="flex items-center gap-12">
+          <Metric value="<100ms" label="Latencia" />
+          <Metric value="24 letras" label="Alfabeto A-Y" />
+          <Metric value="ASL" label="Señas estáticas" />
         </div>
       </section>
 
+      {/* Construido con */}
+      <div className="px-20 py-5 border-t border-border flex items-center gap-5">
+        <SectionLabel>Construido con</SectionLabel>
+        <div className="flex items-center gap-4">
+          {['React + TS', 'Spring Boot', 'FastAPI', 'TensorFlow', 'MediaPipe', 'Docker'].map((t, i, arr) => (
+            <span key={t} className="flex items-center gap-4">
+              <span className="font-sans font-semibold text-13 text-ink2">{t}</span>
+              {i < arr.length - 1 && <span className="text-ink5">·</span>}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Demo */}
+      <div className="mt-4">
+        <DemoSection />
+      </div>
+
+      {/* Capacidades */}
       <section className="px-20 pb-20">
-        <SectionLabel>·01 · Capacidades</SectionLabel>
+        <SectionLabel>·02 · Capacidades</SectionLabel>
         <h2 className="font-sans text-48 font-semibold text-ink mt-3 mb-12 tracking-tighter2 leading-[1.05] max-w-2xl">
-          Por qué <span className="font-serif italic font-normal">Signa</span>
+          Tecnología discreta, <span className="font-serif italic font-normal">impacto profundo</span>
         </h2>
         <div className="grid grid-cols-3 border border-border rounded-16 overflow-hidden bg-surface">
           {features.map((f, i) => {
@@ -157,35 +251,49 @@ function LandingDesktop() {
         </div>
       </section>
 
+      {/* Comunidad */}
       <section className="px-20 pb-20">
-        <SectionLabel>·02 · Cómo funciona</SectionLabel>
-        <h2 className="font-sans text-48 font-semibold text-ink mt-3 mb-12 tracking-tighter2 leading-[1.05] max-w-2xl">
-          Tres servicios, <span className="font-serif italic font-normal">una idea</span>
-        </h2>
-        <div className="grid grid-cols-3 border border-border rounded-16 overflow-hidden">
-          {stack.map((s, i) => (
-            <div
-              key={s.tag}
-              className={`p-9 bg-surface ${i < 2 ? 'border-r border-border' : ''}`}
-            >
-              <div className="flex items-center justify-between mb-7">
-                <SectionLabel emphasized>{s.tag}</SectionLabel>
-                <span className="font-mono text-10 text-ink4 tracking-wide1">0{i + 1}</span>
-              </div>
-              <h3 className="font-sans text-20 font-semibold text-ink mb-2 tracking-tight1">
-                {s.stack}
-              </h3>
-              <p className="font-sans text-14 text-ink3 leading-[1.6]">{s.desc}</p>
-            </div>
-          ))}
+        <div
+          className="bg-black text-white rounded-20 p-16 relative overflow-hidden"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px)',
+            backgroundSize: '40px 40px',
+          }}
+        >
+          <Badge variant="outline_white" className="mb-6">
+            ·03 · Comunidad
+          </Badge>
+          <h2 className="font-sans text-56 font-semibold text-white leading-[1.0] tracking-tighter2 mb-5">
+            Construyamos el<br />
+            <span className="font-serif italic font-normal">futuro juntos.</span>
+          </h2>
+          <p className="font-sans text-15 text-white/70 leading-[1.6] max-w-lg mb-7">
+            Signa es código abierto. Creemos que la accesibilidad universal no debe tener dueños.
+            Únete a desarrolladores y traductores para mejorar los modelos juntos.
+          </p>
+          <div className="flex gap-3">
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+              <Button variant="white" icon={<IcUsers s={15} w={1.6} />}>
+                Unirme a la comunidad
+              </Button>
+            </a>
+            <a href={`${GITHUB_URL}/Sign_Language_Translator`} target="_blank" rel="noopener noreferrer">
+              <Button variant="outline_white" icon={<IcGithub s={14} />}>
+                Cómo contribuir
+              </Button>
+            </a>
+          </div>
         </div>
       </section>
 
+      {/* FAQ */}
       <section className="px-20 pb-24 grid grid-cols-2 gap-20">
         <div>
-          <SectionLabel>·03 · Preguntas frecuentes</SectionLabel>
+          <SectionLabel>·04 · Preguntas</SectionLabel>
           <h2 className="font-sans text-44 font-semibold text-ink mt-3 tracking-tighter2 leading-[1.05]">
-            Lo que probablemente te <span className="font-serif italic font-normal">preguntas</span>
+            Preguntas<br />
+            <span className="font-serif italic font-normal">frecuentes</span>
           </h2>
         </div>
         <div>
@@ -222,10 +330,15 @@ function LandingMobile() {
       )}
 
       <section className="px-5 pt-9 pb-7">
-        <Badge variant="dark">
-          <IcSparkle s={11} w={1.7} /> IA Generativa
-        </Badge>
-        <h1 className="font-sans text-44 font-semibold text-ink leading-[0.98] tracking-tightest mt-5 mb-4">
+        <div className="flex gap-2 mb-5">
+          <Badge variant="dark">
+            <IcSparkle s={11} w={1.7} /> IA Generativa
+          </Badge>
+          <Badge variant="outline">
+            <IcCode s={11} w={1.7} /> Open Source
+          </Badge>
+        </div>
+        <h1 className="font-sans text-44 font-semibold text-ink leading-[0.98] tracking-tightest mt-3 mb-4">
           Rompiendo barreras con{' '}
           <span className="font-serif italic font-normal">signa</span>
         </h1>
@@ -238,9 +351,17 @@ function LandingMobile() {
               Comenzar ahora
             </Button>
           </Link>
-          <Button size="lg" variant="secondary" icon={<IcPlay s={11} />} className="w-full">
-            Ver demo
-          </Button>
+          <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="w-full">
+            <Button size="lg" variant="secondary" icon={<IcGithub s={16} />} className="w-full">
+              GitHub
+            </Button>
+          </a>
+        </div>
+        <Divider className="mt-8 mb-5" />
+        <div className="flex gap-8">
+          <Metric value="<100ms" label="Latencia" />
+          <Metric value="24 letras" label="Alfabeto A-Y" />
+          <Metric value="ASL" label="Señas estáticas" />
         </div>
       </section>
 
@@ -249,9 +370,10 @@ function LandingMobile() {
       </div>
 
       <section className="px-5 pb-9">
-        <SectionLabel>·01 · Capacidades</SectionLabel>
+        <SectionLabel>·02 · Capacidades</SectionLabel>
         <h2 className="font-sans text-26 font-semibold text-ink mt-3 mb-5 tracking-tighter2 leading-[1.05]">
-          Por qué <span className="font-serif italic font-normal">Signa</span>
+          Tecnología discreta,{' '}
+          <span className="font-serif italic font-normal">impacto profundo</span>
         </h2>
         <Card className="p-0 overflow-hidden">
           {features.map((f, i) => {
@@ -276,9 +398,31 @@ function LandingMobile() {
         </Card>
       </section>
 
+      {/* Comunidad mobile */}
       <section className="px-5 pb-9">
-        <SectionLabel>·02 · Preguntas</SectionLabel>
-        <Card className="p-5 mt-3">
+        <div className="bg-black text-white rounded-16 p-7">
+          <Badge variant="outline_white" className="mb-4">·03 · Comunidad</Badge>
+          <h2 className="font-sans text-28 font-semibold text-white leading-[1.05] tracking-tighter2 mb-4">
+            Construyamos el{' '}
+            <span className="font-serif italic font-normal">futuro juntos.</span>
+          </h2>
+          <p className="font-sans text-13 text-white/70 leading-[1.5] mb-5">
+            Signa es código abierto. Únete para mejorar los modelos juntos.
+          </p>
+          <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+            <Button variant="white" size="sm" icon={<IcGithub s={13} />} className="w-full">
+              Ver en GitHub
+            </Button>
+          </a>
+        </div>
+      </section>
+
+      <section className="px-5 pb-9">
+        <SectionLabel>·04 · Preguntas</SectionLabel>
+        <h2 className="font-sans text-26 font-semibold text-ink mt-3 mb-5 tracking-tighter2">
+          Preguntas <span className="font-serif italic font-normal">frecuentes</span>
+        </h2>
+        <Card className="p-5">
           {faqs.map((f) => (
             <FAQItem key={f.q} q={f.q} a={f.a} />
           ))}
@@ -289,8 +433,6 @@ function LandingMobile() {
         <div className="flex justify-center">
           <SignaLogo size={26} />
         </div>
-        <Divider className="my-5" />
-        <p className="font-mono text-10 text-ink4 tracking-wide1">© 2024 SIGNA · MIT LICENSE</p>
       </footer>
     </div>
   );

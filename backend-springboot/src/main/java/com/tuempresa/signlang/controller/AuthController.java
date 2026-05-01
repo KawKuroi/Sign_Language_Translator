@@ -7,6 +7,7 @@ import com.tuempresa.signlang.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,5 +26,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
+    }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteAccount(Authentication authentication) {
+        authService.deleteByEmail(authentication.getName());
+        return ResponseEntity.noContent().build();
     }
 }

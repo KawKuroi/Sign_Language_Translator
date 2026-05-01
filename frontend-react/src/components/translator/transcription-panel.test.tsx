@@ -11,12 +11,12 @@ function wrap(ui: ReactNode) {
 
 describe('TranscriptionPanel', () => {
   it('shows placeholder when word is empty', () => {
-    wrap(<TranscriptionPanel word="" status="idle" isAuthenticated={false} />);
+    wrap(<TranscriptionPanel word="" status="idle" />);
     expect(screen.getByText(/aparecerá aquí/i)).toBeInTheDocument();
   });
 
   it('shows the word when present', () => {
-    wrap(<TranscriptionPanel word="HOLA" status="running" isAuthenticated={false} />);
+    wrap(<TranscriptionPanel word="HOLA" status="running" />);
     expect(screen.getByText(/HOLA/)).toBeInTheDocument();
   });
 
@@ -26,35 +26,17 @@ describe('TranscriptionPanel', () => {
       value: { writeText },
       configurable: true,
     });
-    wrap(<TranscriptionPanel word="HOLA" status="idle" isAuthenticated={false} />);
+    wrap(<TranscriptionPanel word="HOLA" status="idle" />);
     await userEvent.click(screen.getByLabelText(/copiar transcripción/i));
     expect(writeText).toHaveBeenCalledWith('HOLA');
   });
 
-  it('Save button calls onLoginPrompt when not authenticated', async () => {
-    const onLoginPrompt = vi.fn();
+  it('Save button calls onSave when word is present', async () => {
     const onSave = vi.fn();
     wrap(
       <TranscriptionPanel
         word="HOLA"
         status="idle"
-        isAuthenticated={false}
-        onSave={onSave}
-        onLoginPrompt={onLoginPrompt}
-      />,
-    );
-    await userEvent.click(screen.getByRole('button', { name: /iniciar sesión para guardar/i }));
-    expect(onLoginPrompt).toHaveBeenCalled();
-    expect(onSave).not.toHaveBeenCalled();
-  });
-
-  it('Save button calls onSave when authenticated', async () => {
-    const onSave = vi.fn();
-    wrap(
-      <TranscriptionPanel
-        word="HOLA"
-        status="idle"
-        isAuthenticated
         onSave={onSave}
       />,
     );

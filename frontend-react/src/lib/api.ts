@@ -90,6 +90,7 @@ export const authApi = {
     api.post<AuthResponse>('/auth/register', { email, password }).then((r) => r.data),
   login: (email: string, password: string) =>
     api.post<AuthResponse>('/auth/login', { email, password }).then((r) => r.data),
+  deleteAccount: () => api.delete<void>('/auth/me').then(() => undefined),
 };
 
 export const translateApi = {

@@ -7,12 +7,12 @@ const buttonStyles = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-ink text-white hover:bg-black',
+        primary: 'bg-ink !text-white hover:bg-black',
         secondary: 'bg-surface text-ink border-border hover:bg-surface2',
         ghost: 'bg-transparent text-ink2 hover:bg-surface2',
-        white: 'bg-white text-ink hover:bg-surface2',
-        outline_white: 'bg-transparent text-white border-white/20 hover:bg-white/10',
-        danger: 'bg-danger text-white hover:bg-red-700',
+        white: 'bg-white !text-ink hover:bg-surface2',
+        outline_white: 'bg-transparent !text-white border-white/20 hover:bg-white/10',
+        danger: 'bg-danger !text-white hover:bg-red-700',
       },
       size: {
         sm: 'h-[34px] px-[14px] text-13 gap-[6px]',

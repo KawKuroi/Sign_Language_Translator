@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import type Webcam from 'react-webcam';
 import axios from 'axios';
 import { AppSidebar } from '@/components/layout/app-sidebar';
@@ -16,11 +15,11 @@ import { useIsMobile } from '@/hooks/use-media-query';
 import { useTranslator } from '@/hooks/use-translator';
 import { useAuth } from '@/lib/auth';
 import { historyApi } from '@/lib/api';
+import { localHistory } from '@/lib/local-history';
 
 export default function AppTranslatorPage() {
   const isMobile = useIsMobile();
   const webcamRef = useRef<Webcam>(null);
-  const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
 
@@ -71,23 +70,25 @@ export default function AppTranslatorPage() {
     if (!translator.word) return;
     setSaving(true);
     try {
-      await historyApi.save(translator.word);
-      toast({ title: 'Traducción guardada', variant: 'success' });
+      if (user) {
+        await historyApi.save(translator.word);
+        toast({ title: 'Traducción guardada', variant: 'success' });
+      } else {
+        localHistory.save(translator.word);
+        toast({ title: 'Guardada localmente', description: 'Inicia sesión para sincronizar.', variant: 'success' });
+      }
       translator.reset();
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === 401) {
-        toast({ title: 'Sesión expirada', description: 'Inicia sesión de nuevo.', variant: 'error' });
-        navigate('/login', { state: { from: { pathname: '/app' } } });
+        localHistory.save(translator.word);
+        toast({ title: 'Sesión expirada — guardada localmente', variant: 'success' });
+        translator.reset();
       } else {
         toast({ title: 'No se pudo guardar', variant: 'error' });
       }
     } finally {
       setSaving(false);
     }
-  };
-
-  const handleLoginPrompt = () => {
-    navigate('/login', { state: { from: { pathname: '/app' } } });
   };
 
   if (isMobile) {
@@ -125,10 +126,8 @@ export default function AppTranslatorPage() {
           <TranscriptionPanel
             word={translator.word}
             status={translator.engineStatus}
-            isAuthenticated={!!user}
             onSave={handleSave}
             onClear={translator.reset}
-            onLoginPrompt={handleLoginPrompt}
             saving={saving}
           />
         </div>
@@ -169,10 +168,8 @@ export default function AppTranslatorPage() {
           <TranscriptionPanel
             word={translator.word}
             status={translator.engineStatus}
-            isAuthenticated={!!user}
             onSave={handleSave}
             onClear={translator.reset}
-            onLoginPrompt={handleLoginPrompt}
             saving={saving}
           />
         </div>

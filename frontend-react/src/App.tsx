@@ -7,6 +7,8 @@ import { SectionLabel } from '@/components/ui/section-label';
 const LandingPage = lazy(() => import('@/pages/landing'));
 const AppTranslatorPage = lazy(() => import('@/pages/app-translator'));
 const HistoryPage = lazy(() => import('@/pages/history'));
+const DictionaryPage = lazy(() => import('@/pages/dictionary'));
+const SettingsPage = lazy(() => import('@/pages/settings'));
 const AboutPage = lazy(() => import('@/pages/about'));
 const LoginPage = lazy(() => import('@/pages/login'));
 const RegisterPage = lazy(() => import('@/pages/register'));
@@ -38,11 +40,13 @@ export default function App() {
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/app" element={<AppTranslatorPage />} />
+              <Route path="/history" element={<HistoryPage />} />
+              <Route path="/dictionary" element={<DictionaryPage />} />
               <Route
-                path="/history"
+                path="/settings"
                 element={
                   <RequireAuth>
-                    <HistoryPage />
+                    <SettingsPage />
                   </RequireAuth>
                 }
               />

@@ -25,7 +25,7 @@ public class AiServiceClient {
         Map<String, String> body = Map.of("image", imageDataUrl);
         ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
                 url, HttpMethod.POST, new HttpEntity<>(body),
-                new ParameterizedTypeReference<>() {}
+                new ParameterizedTypeReference<Map<String, Object>>() {}
         );
         return response.getBody();
     }

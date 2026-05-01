@@ -8,20 +8,16 @@ import { cn } from '@/lib/utils';
 interface TranscriptionPanelProps {
   word: string;
   status: 'idle' | 'running' | 'error';
-  isAuthenticated: boolean;
   onSave?: () => void;
   onClear?: () => void;
-  onLoginPrompt?: () => void;
   saving?: boolean;
 }
 
 export function TranscriptionPanel({
   word,
   status,
-  isAuthenticated,
   onSave,
   onClear,
-  onLoginPrompt,
   saving = false,
 }: TranscriptionPanelProps) {
   const { toast } = useToast();
@@ -33,14 +29,6 @@ export function TranscriptionPanel({
       .then(() => toast({ title: 'Copiado al portapapeles', variant: 'success' }))
       .catch(() => toast({ title: 'No se pudo copiar', variant: 'error' }));
   }, [word, toast]);
-
-  const handleSave = () => {
-    if (!isAuthenticated) {
-      onLoginPrompt?.();
-      return;
-    }
-    onSave?.();
-  };
 
   const dotColor = status === 'running' ? '#10B981' : status === 'error' ? '#DC2626' : '#D4D4D4';
   const statusLabel =
@@ -85,23 +73,21 @@ export function TranscriptionPanel({
           </span>
         )}
       </div>
-      {(word || isAuthenticated) && (
+      {word && (
         <div className="px-[18px] py-3 border-t border-border flex items-center justify-end gap-2">
-          {word && onClear && (
+          {onClear && (
             <Button variant="ghost" size="sm" onClick={onClear}>
               Limpiar
             </Button>
           )}
-          {word && (
-            <Button
-              variant="primary"
-              size="sm"
-              disabled={saving}
-              onClick={handleSave}
-            >
-              {saving ? 'Guardando…' : isAuthenticated ? 'Guardar' : 'Iniciar sesión para guardar'}
-            </Button>
-          )}
+          <Button
+            variant="primary"
+            size="sm"
+            disabled={saving}
+            onClick={onSave}
+          >
+            {saving ? 'Guardando…' : 'Guardar'}
+          </Button>
         </div>
       )}
     </div>

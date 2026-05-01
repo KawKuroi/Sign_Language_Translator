@@ -11,6 +11,7 @@ interface AuthContextValue {
   login: (email: string, password: string, persistent?: boolean) => Promise<void>;
   register: (email: string, password: string, persistent?: boolean) => Promise<void>;
   logout: () => void;
+  deleteAccount: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -71,9 +72,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   }, []);
 
+  const deleteAccount = useCallback(async () => {
+    await authApi.deleteAccount();
+    clearToken();
+    setUser(null);
+  }, []);
+
   const value = useMemo<AuthContextValue>(
-    () => ({ user, loading, login, register, logout }),
-    [user, loading, login, register, logout],
+    () => ({ user, loading, login, register, logout, deleteAccount }),
+    [user, loading, login, register, logout, deleteAccount],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
