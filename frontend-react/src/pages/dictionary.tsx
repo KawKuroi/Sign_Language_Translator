@@ -20,7 +20,7 @@ function LetterCard({ letter, description }: { letter: string; description: stri
 
 function DictionaryContent() {
   return (
-    <div className="max-w-5xl">
+    <div className="w-full">
       <div className="mb-8">
         <SectionLabel emphasized>Alfabeto ASL</SectionLabel>
         <h1 className="font-sans text-36 font-semibold text-ink mt-2 tracking-tighter2 leading-[1.05]">
@@ -32,7 +32,7 @@ function DictionaryContent() {
         </p>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
         {ASL_ALPHABET.map((entry) => (
           <LetterCard
             key={entry.letter}

@@ -40,7 +40,7 @@ describe('TranscriptionPanel', () => {
         onSave={onSave}
       />,
     );
-    await userEvent.click(screen.getByRole('button', { name: /^guardar$/i }));
+    await userEvent.click(screen.getByRole('button', { name: /guardar al historial/i }));
     expect(onSave).toHaveBeenCalled();
   });
 });

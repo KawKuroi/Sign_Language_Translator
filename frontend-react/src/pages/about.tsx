@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ReactNode } from 'react';
+import React, { useState, type FormEvent, type ReactNode } from 'react';
 import { NavDesktop } from '@/components/layout/nav-desktop';
 import { FooterDesktop } from '@/components/layout/footer-desktop';
 import { SectionLabel } from '@/components/ui/section-label';
@@ -14,10 +14,12 @@ import { MobileBottomNav } from '@/components/layout/mobile-bottomnav';
 
 const GITHUB_URL = 'https://github.com/KawKuroi';
 
-const GRID_BG = {
+const GRID_OVERLAY_STYLE: React.CSSProperties = {
   backgroundImage:
-    'linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px)',
-  backgroundSize: '36px 36px',
+    'linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px)',
+  backgroundSize: '40px 40px',
+  maskImage: 'radial-gradient(ellipse at 70% 30%, black 0%, transparent 70%)',
+  WebkitMaskImage: 'radial-gradient(ellipse at 70% 30%, black 0%, transparent 70%)',
 };
 
 function Pill({
@@ -74,7 +76,7 @@ function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-surface border border-border rounded-16 p-7 flex flex-col gap-4"
+      className="bg-surface border border-border rounded-16 p-8 flex flex-col gap-4"
     >
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-[6px]">
@@ -123,15 +125,15 @@ function AboutDesktop() {
       <NavDesktop />
 
       {/* Quién está detrás */}
-      <section className="px-20 pt-20 pb-14 grid grid-cols-2 gap-16 items-end">
+      <section className="px-20 pt-[88px] pb-16 grid grid-cols-2 gap-20 items-end">
         <div>
           <SectionLabel>·01 · Quién está detrás</SectionLabel>
-          <h1 className="font-sans text-72 font-semibold text-ink leading-[0.95] tracking-tightest mt-4">
+          <h1 className="font-sans text-80 font-semibold text-ink leading-[0.95] tracking-tightest mt-5">
             Un proyecto<br />
-            <span className="font-serif italic font-normal">en solitario.</span>
+            <span className="font-serif italic font-normal">en solitario</span>.
           </h1>
         </div>
-        <p className="font-sans text-16 text-ink2 leading-[1.65]">
+        <p className="font-sans text-17 text-ink2 leading-[1.6] max-w-[480px]">
           Signa nació como un experimento personal sobre cómo la IA puede acortar distancias.
           Lo construyo en mis horas libres, con Claude Code como copiloto, y con la convicción
           de que la accesibilidad no debería esperar a tener un equipo grande detrás.
@@ -147,28 +149,28 @@ function AboutDesktop() {
           <SectionLabel>1 humano · 1 IA</SectionLabel>
         </div>
 
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid gap-5" style={{ gridTemplateColumns: '1.4fr 1fr' }}>
           {/* Card humano */}
-          <div className="bg-surface border border-border rounded-16 p-7 flex gap-7">
-            <div className="w-[180px] h-[180px] rounded-12 bg-bg border border-border flex items-center justify-center relative shrink-0 overflow-hidden">
-              <span className="font-serif italic text-[100px] text-ink leading-none select-none">k</span>
-              <span className="absolute top-3 right-3 font-mono text-10 text-ink4">/01</span>
+          <div className="bg-surface border border-border rounded-20 p-9 grid gap-8 items-start" style={{ gridTemplateColumns: '200px 1fr' }}>
+            <div className="w-[200px] h-[200px] rounded-16 bg-surface2 border border-border flex items-center justify-center relative shrink-0 overflow-hidden">
+              <span className="font-serif italic text-[130px] text-ink leading-none select-none -mt-2">k</span>
+              <span className="absolute top-3 right-3 font-mono text-10 text-ink4 tracking-wide1">/01</span>
             </div>
-            <div className="flex-1 min-w-0">
-              <SectionLabel className="mb-2">Founder · Engineer · Designer</SectionLabel>
-              <h3 className="font-sans text-26 font-semibold text-ink tracking-tight1">
+            <div className="pt-1">
+              <SectionLabel>Founder · Engineer · Designer</SectionLabel>
+              <h3 className="font-sans text-32 font-semibold text-ink tracking-tighter1 mt-[10px] mb-1 leading-[1.05]">
                 Kaw<span className="font-serif italic font-normal">Kuroi</span>
               </h3>
-              <p className="font-mono text-11 text-ink4 mb-4">@kawkuroi</p>
-              <p className="font-sans text-14 text-ink3 leading-[1.6] mb-5">
+              <p className="font-mono text-12 text-ink4 mb-[18px] tracking-wide1">@kawkuroi</p>
+              <p className="font-sans text-14 text-ink3 leading-[1.6] mb-6">
                 Diseño, desarrollo y entreno los modelos. Cada decisión —desde la arquitectura
                 de microservicios hasta el placement de un botón— pasa por mis manos.
               </p>
               <div className="flex gap-2 flex-wrap">
-                <Pill href={GITHUB_URL} icon={<IcGithub s={11} />}>
+                <Pill href={GITHUB_URL} icon={<IcGithub s={14} />}>
                   github.com/KawKuroi
                 </Pill>
-                <Pill href="#" icon={<IcLink s={11} w={1.5} />}>
+                <Pill href="#" icon={<IcLink s={13} w={1.6} />}>
                   Portfolio
                 </Pill>
               </div>
@@ -176,19 +178,22 @@ function AboutDesktop() {
           </div>
 
           {/* Card IA */}
-          <div className="bg-black text-white rounded-16 p-7 flex flex-col" style={GRID_BG}>
-            <div className="flex justify-between items-start mb-4">
-              <SectionLabel className="text-white/50">Pair Programmer · IA</SectionLabel>
-              <span className="font-mono text-10 text-white/30">/02</span>
+          <div className="bg-black text-white rounded-20 p-9 flex flex-col justify-between relative overflow-hidden">
+            <div className="absolute inset-0 pointer-events-none" style={GRID_OVERLAY_STYLE} />
+            <div className="relative">
+              <div className="flex items-center justify-between mb-7">
+                <SectionLabel className="text-white/50 uppercase tracking-wide2">Pair programmer · IA</SectionLabel>
+                <span className="font-mono text-10 text-white/40 tracking-wide1">/02</span>
+              </div>
+              <h3 className="font-sans text-32 font-semibold text-white tracking-tighter1 mb-[14px] leading-[1.05]">
+                Claude <span className="font-serif italic font-normal">Code</span>
+              </h3>
+              <p className="font-sans text-14 text-white/70 leading-[1.6]">
+                Mi colaborador en arquitectura, refactors y debugging. Acelera lo que sería
+                imposible solo, manteniéndome a cargo de cada decisión de producto.
+              </p>
             </div>
-            <h3 className="font-sans text-32 font-semibold text-white tracking-tight1 mb-3">
-              Claude <span className="font-serif italic font-normal">Code</span>
-            </h3>
-            <p className="font-sans text-14 text-white/70 leading-[1.6] mb-auto">
-              Mi colaborador en arquitectura, refactors y debugging. Acelera lo que sería
-              imposible solo, manteniéndome a cargo de cada decisión de producto.
-            </p>
-            <div className="flex gap-2 mt-6 flex-wrap">
+            <div className="relative flex gap-2 mt-7 flex-wrap">
               <Pill dark>Anthropic</Pill>
               <Pill dark>Sonnet 4.5</Pill>
             </div>
@@ -217,13 +222,13 @@ function AboutDesktop() {
       </section>
 
       {/* Contacto */}
-      <section className="px-20 pb-24 grid grid-cols-2 gap-16 items-start">
+      <section className="px-20 pb-24 items-start" style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '80px' }}>
         <div>
           <SectionLabel>·03 · Contacto</SectionLabel>
-          <h2 className="font-sans text-44 font-semibold text-ink mt-3 tracking-tighter2 leading-[1.05]">
+          <h2 className="font-sans text-36 font-semibold text-ink mt-[14px] mb-4 tracking-tighter2 leading-[1.05]">
             Retroalimenta<span className="font-serif italic font-normal">ción</span>
           </h2>
-          <p className="font-sans text-15 text-ink3 mt-4 leading-[1.6] max-w-sm">
+          <p className="font-sans text-14 text-ink3 leading-[1.6]">
             Tu opinión me ayuda a mejorar Signa. ¿Tienes una sugerencia, encontraste un bug o
             quieres saludar? Escríbeme.
           </p>
@@ -271,17 +276,20 @@ function AboutMobile() {
             </p>
             <Pill href={GITHUB_URL} icon={<IcGithub s={11} />}>github.com/KawKuroi</Pill>
           </div>
-          <div className="bg-black text-white rounded-12 p-5" style={GRID_BG}>
-            <SectionLabel className="text-white/50 mb-2">Pair Programmer · IA</SectionLabel>
-            <h3 className="font-sans text-22 font-semibold text-white">
-              Claude <span className="font-serif italic font-normal">Code</span>
-            </h3>
-            <p className="font-sans text-13 text-white/70 leading-[1.5] mt-2 mb-4">
-              Mi colaborador en arquitectura, refactors y debugging.
-            </p>
-            <div className="flex gap-2">
-              <Pill dark>Anthropic</Pill>
-              <Pill dark>Sonnet 4.5</Pill>
+          <div className="bg-black text-white rounded-12 p-5 relative overflow-hidden">
+            <div className="absolute inset-0 pointer-events-none" style={GRID_OVERLAY_STYLE} />
+            <div className="relative">
+              <SectionLabel className="text-white/50 mb-2">Pair Programmer · IA</SectionLabel>
+              <h3 className="font-sans text-22 font-semibold text-white">
+                Claude <span className="font-serif italic font-normal">Code</span>
+              </h3>
+              <p className="font-sans text-13 text-white/70 leading-[1.5] mt-2 mb-4">
+                Mi colaborador en arquitectura, refactors y debugging.
+              </p>
+              <div className="flex gap-2">
+                <Pill dark>Anthropic</Pill>
+                <Pill dark>Sonnet 4.5</Pill>
+              </div>
             </div>
           </div>
         </section>

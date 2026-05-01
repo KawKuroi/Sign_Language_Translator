@@ -11,6 +11,7 @@ import {
   IcArrowRight,
   IcBolt,
   IcCamera,
+  IcChevronDown,
   IcCode,
   IcEye,
   IcGithub,
@@ -56,8 +57,8 @@ function HeroPreview() {
 function Metric({ value, label }: { value: string; label: string }) {
   return (
     <div>
-      <p className="font-serif italic font-normal text-26 text-ink leading-none">{value}</p>
-      <p className="font-mono text-10 text-ink4 tracking-wide2 mt-1 uppercase">{label}</p>
+      <p className="font-serif italic font-normal text-28 text-ink leading-none" style={{ letterSpacing: '-0.02em' }}>{value}</p>
+      <p className="font-mono text-10 text-ink4 tracking-wide2 mt-[6px] uppercase">{label}</p>
     </div>
   );
 }
@@ -99,7 +100,9 @@ function FAQItem({ q, a }: { q: string; a: string }) {
         aria-expanded={open}
       >
         <span className="font-sans font-medium text-16 text-ink tracking-tight1">{q}</span>
-        <span className={open ? 'rotate-180 transition-transform text-ink4' : 'transition-transform text-ink4'}>▾</span>
+        <span className={`flex text-ink4 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}>
+          <IcChevronDown s={16} />
+        </span>
       </button>
       {open && (
         <p className="font-sans text-14 text-ink3 leading-[23px] pb-[22px] pr-8">{a}</p>
@@ -126,23 +129,31 @@ function DemoSection() {
       </div>
 
       <div
-        className="relative w-full rounded-16 overflow-hidden bg-black flex items-center justify-center"
+        className="relative w-full rounded-20 overflow-hidden bg-black flex items-center justify-center border border-border"
         style={{ aspectRatio: '16/9' }}
       >
-        <button
-          type="button"
-          aria-label="Reproducir demo"
-          onClick={() => toast({ title: 'Demo próximamente', description: 'El vídeo de demo estará disponible pronto.' })}
-          className="w-20 h-20 rounded-full bg-white flex items-center justify-center hover:scale-105 transition-transform"
+        <div
+          className="absolute inset-0 flex items-center justify-center"
+          style={{ background: 'radial-gradient(ellipse at center, #1a1a1a 0%, #000 80%)' }}
         >
-          <IcPlay s={28} />
-        </button>
-        <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3">
-          <span className="font-mono text-11 text-white/60">02:14</span>
-          <div className="flex-1 h-[2px] bg-white/10 relative rounded-full">
-            <div className="absolute left-0 top-0 h-full bg-white/60 rounded-full" style={{ width: '44%' }} />
+          <button
+            type="button"
+            aria-label="Reproducir demo"
+            onClick={() => toast({ title: 'Demo próximamente', description: 'El vídeo de demo estará disponible pronto.' })}
+            className="w-[72px] h-[72px] rounded-full bg-white flex items-center justify-center hover:scale-105 transition-transform pl-1"
+            style={{ boxShadow: '0 8px 32px rgba(255,255,255,0.15)' }}
+          >
+            <IcPlay s={22} />
+          </button>
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 px-7 pb-6 pt-10" style={{ background: 'linear-gradient(transparent, rgba(0,0,0,0.7))' }}>
+          <div className="h-[2px] bg-white/15 rounded-full mb-3 relative">
+            <div className="absolute left-0 top-0 h-full bg-white rounded-full" style={{ width: '34%' }} />
           </div>
-          <span className="font-mono text-11 text-white/60">05:00</span>
+          <div className="flex justify-between">
+            <span className="font-mono text-11 text-white tracking-wide1">02:14</span>
+            <span className="font-mono text-11 text-white/50 tracking-wide1">05:00</span>
+          </div>
         </div>
       </div>
     </section>
@@ -155,10 +166,10 @@ function LandingDesktop() {
       <NavDesktop />
 
       {/* Hero */}
-      <section className="px-20 pt-24 pb-16">
-        <div className="grid grid-cols-2 gap-16 items-center">
+      <section className="px-20 pt-[88px] pb-[72px]">
+        <div className="grid gap-14 items-start" style={{ gridTemplateColumns: '540px 1fr' }}>
           <div>
-            <div className="flex gap-2 mb-6">
+            <div className="flex gap-2 mb-9">
               <Badge variant="dark">
                 <IcSparkle s={11} w={1.7} /> IA Generativa
               </Badge>
@@ -166,19 +177,19 @@ function LandingDesktop() {
                 <IcCode s={11} w={1.7} /> Open Source
               </Badge>
             </div>
-            <h1 className="font-sans text-72 font-semibold text-ink leading-[0.95] tracking-tightest mb-6">
+            <h1 className="font-sans text-72 font-semibold text-ink leading-[0.98] tracking-tightest mb-6">
               Rompiendo<br />
-              barreras con<br />
+              barreras con{' '}
               <span className="font-serif italic font-normal">signa</span>
             </h1>
-            <p className="font-sans text-16 text-ink2 leading-[1.6] mb-8 max-w-md">
+            <p className="font-sans text-17 text-ink2 leading-[1.55] mb-9 max-w-[480px]">
               Traducción del alfabeto de Lenguaje de Señas Americano (ASL) en tiempo real con visión
               computacional. Una herramienta para conectar mundos de forma fluida, accesible y sin
               intermediarios.
             </p>
-            <div className="flex gap-3">
+            <div className="flex items-center gap-[10px]">
               <Link to="/app">
-                <Button size="lg" variant="primary" iconRight={<IcArrowRight s={15} w={1.7} />}>
+                <Button size="lg" variant="primary" iconRight={<IcArrowRight s={16} w={1.8} />}>
                   Comenzar ahora
                 </Button>
               </Link>
@@ -191,31 +202,27 @@ function LandingDesktop() {
                 Ver demo
               </Button>
             </div>
+            <div className="flex gap-10 mt-14 pt-7 border-t border-border">
+              <Metric value="<100ms" label="Latencia" />
+              <Metric value="24 letras" label="Alfabeto A-Y" />
+              <Metric value="ASL" label="Señas estáticas" />
+            </div>
           </div>
           <div>
             <HeroPreview />
           </div>
         </div>
-
-        <Divider className="mt-14 mb-8" />
-        <div className="flex items-center gap-12">
-          <Metric value="<100ms" label="Latencia" />
-          <Metric value="24 letras" label="Alfabeto A-Y" />
-          <Metric value="ASL" label="Señas estáticas" />
-        </div>
       </section>
 
       {/* Construido con */}
-      <div className="px-20 py-5 border-t border-border flex items-center gap-5">
+      <div className="px-20 py-5 border-t border-b border-border flex items-center gap-7">
         <SectionLabel>Construido con</SectionLabel>
-        <div className="flex items-center gap-4">
-          {['React + TS', 'Spring Boot', 'FastAPI', 'TensorFlow', 'MediaPipe', 'Docker'].map((t, i, arr) => (
-            <span key={t} className="flex items-center gap-4">
-              <span className="font-sans font-semibold text-13 text-ink2">{t}</span>
-              {i < arr.length - 1 && <span className="text-ink5">·</span>}
-            </span>
-          ))}
-        </div>
+        {['React + TS', 'Spring Boot', 'FastAPI', 'TensorFlow', 'MediaPipe', 'Docker'].map((t, i, arr) => (
+          <span key={t} className="flex items-center gap-7">
+            <span className="font-mono font-medium text-12 text-ink2" style={{ letterSpacing: '-0.01em' }}>{t}</span>
+            {i < arr.length - 1 && <span className="w-[3px] h-[3px] rounded-full bg-ink5 shrink-0" />}
+          </span>
+        ))}
       </div>
 
       {/* Demo */}
@@ -252,48 +259,55 @@ function LandingDesktop() {
       </section>
 
       {/* Comunidad */}
-      <section className="px-20 pb-20">
+      <section className="px-20 pb-[88px]">
         <div
-          className="bg-black text-white rounded-20 p-16 relative overflow-hidden"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px)',
-            backgroundSize: '40px 40px',
-          }}
+          className="bg-black text-white rounded-24 relative overflow-hidden"
+          style={{ padding: '72px 64px' }}
         >
-          <Badge variant="outline_white" className="mb-6">
-            ·03 · Comunidad
-          </Badge>
-          <h2 className="font-sans text-56 font-semibold text-white leading-[1.0] tracking-tighter2 mb-5">
-            Construyamos el<br />
-            <span className="font-serif italic font-normal">futuro juntos.</span>
-          </h2>
-          <p className="font-sans text-15 text-white/70 leading-[1.6] max-w-lg mb-7">
-            Signa es código abierto. Creemos que la accesibilidad universal no debe tener dueños.
-            Únete a desarrolladores y traductores para mejorar los modelos juntos.
-          </p>
-          <div className="flex gap-3">
-            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
-              <Button variant="white" icon={<IcUsers s={15} w={1.6} />}>
-                Unirme a la comunidad
-              </Button>
-            </a>
-            <a href={`${GITHUB_URL}/Sign_Language_Translator`} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline_white" icon={<IcGithub s={14} />}>
-                Cómo contribuir
-              </Button>
-            </a>
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px)',
+              backgroundSize: '48px 48px',
+              maskImage: 'radial-gradient(ellipse at 80% 50%, black 0%, transparent 70%)',
+              WebkitMaskImage: 'radial-gradient(ellipse at 80% 50%, black 0%, transparent 70%)',
+            }}
+          />
+          <div className="relative max-w-[680px]">
+            <Badge variant="outline_white" className="mb-6">
+              ·03 · Comunidad
+            </Badge>
+            <h2 className="font-sans text-56 font-semibold text-white leading-[1.02] tracking-tighter2 mb-5">
+              Construyamos el<br />
+              <span className="font-serif italic font-normal">futuro juntos.</span>
+            </h2>
+            <p className="font-sans text-16 text-white/65 leading-[1.6] max-w-[560px] mb-9">
+              Signa es código abierto. Creemos que la accesibilidad universal no debe tener dueños.
+              Únete a desarrolladores y traductores para mejorar los modelos juntos.
+            </p>
+            <div className="flex gap-3">
+              <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+                <Button variant="white" size="lg" icon={<IcUsers s={16} w={1.8} />}>
+                  Unirme a la comunidad
+                </Button>
+              </a>
+              <a href={`${GITHUB_URL}/Sign_Language_Translator`} target="_blank" rel="noopener noreferrer">
+                <Button variant="outline_white" size="lg" icon={<IcGithub s={16} />}>
+                  Cómo contribuir
+                </Button>
+              </a>
+            </div>
           </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="px-20 pb-24 grid grid-cols-2 gap-20">
+      <section className="px-20 pb-24" style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '80px' }}>
         <div>
           <SectionLabel>·04 · Preguntas</SectionLabel>
-          <h2 className="font-sans text-44 font-semibold text-ink mt-3 tracking-tighter2 leading-[1.05]">
-            Preguntas<br />
-            <span className="font-serif italic font-normal">frecuentes</span>
+          <h2 className="font-sans text-40 font-semibold text-ink mt-3 tracking-tighter2 leading-[1.05]">
+            Preguntas <span className="font-serif italic font-normal">frecuentes</span>
           </h2>
         </div>
         <div>
@@ -440,9 +454,9 @@ function LandingMobile() {
 
 function MobileMenu({ onClose }: { onClose: () => void }) {
   const links: [string, string][] = [
-    ['/', 'Producto'],
-    ['/about', 'Equipo'],
-    ['/app', 'Abrir App'],
+    ['/', 'Inicio'],
+    ['/about', 'Sobre Signa'],
+    ['/app', 'Probar el traductor'],
     ['/login', 'Iniciar sesión'],
   ];
   return (

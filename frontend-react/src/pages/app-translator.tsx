@@ -128,6 +128,7 @@ export default function AppTranslatorPage() {
             status={translator.engineStatus}
             onSave={handleSave}
             onClear={translator.reset}
+            onWordChange={translator.setWord}
             saving={saving}
           />
         </div>
@@ -170,6 +171,7 @@ export default function AppTranslatorPage() {
             status={translator.engineStatus}
             onSave={handleSave}
             onClear={translator.reset}
+            onWordChange={translator.setWord}
             saving={saving}
           />
         </div>

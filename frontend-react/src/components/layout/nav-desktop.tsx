@@ -8,9 +8,9 @@ interface NavDesktopProps {
 }
 
 const pages = [
-  { to: '/', label: 'Producto', match: (p: string) => p === '/' },
-  { to: '/about', label: 'Equipo', match: (p: string) => p.startsWith('/about') },
-  { to: '/app', label: 'Abrir App', match: (p: string) => p.startsWith('/app') },
+  { to: '/', label: 'Inicio', match: (p: string) => p === '/' },
+  { to: '/about', label: 'Sobre Signa', match: (p: string) => p.startsWith('/about') },
+  { to: '/app', label: 'Probar el traductor', match: (p: string) => p.startsWith('/app') },
 ];
 
 export function NavDesktop({ dark = false }: NavDesktopProps) {

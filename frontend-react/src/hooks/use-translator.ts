@@ -14,6 +14,7 @@ export interface TranslatorState {
   start: () => void;
   stop: () => void;
   reset: () => void;
+  setWord: (word: string) => void;
   word: string;
   currentLetter: string | null;
   confidence: number;
@@ -120,12 +121,14 @@ export function useTranslator({ webcamRef, pollMs = POLL_MS, minConfidence = MIN
     setWord('');
     lastLetterRef.current = null;
   }, []);
+  const setWordExternal = useCallback((w: string) => setWord(w.toUpperCase()), []);
 
   return {
     isActive,
     start,
     stop,
     reset,
+    setWord: setWordExternal,
     word,
     currentLetter,
     confidence,

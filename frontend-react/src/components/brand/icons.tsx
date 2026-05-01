@@ -222,3 +222,4 @@ export const IcLogout = ({ s = 16, w = 1.5, ...rest }: IcProps) => (
     <path d="M21 12H9" />
   </svg>
 );
+

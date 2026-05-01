@@ -37,7 +37,14 @@ export const CameraCard = forwardRef<Webcam, CameraCardProps>(
   ) => {
     if (permission === 'granted') {
       return (
-        <Card className="p-3 flex flex-col gap-3" style={{ minHeight: size === 'desktop' ? 440 : 360 }}>
+        <Card
+          className="p-3 flex flex-col gap-3 mx-auto w-full"
+          style={{
+            minHeight: size === 'desktop' ? 360 : 280,
+            maxWidth: size === 'desktop' ? 720 : '100%',
+            maxHeight: size === 'desktop' ? 540 : 420,
+          }}
+        >
           <WebcamView
             ref={ref}
             isActive={isActive}

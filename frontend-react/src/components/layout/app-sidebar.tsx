@@ -55,7 +55,9 @@ export function AppSidebar({ historyCount }: AppSidebarProps) {
   return (
     <aside className="w-[240px] h-full bg-surface border-r border-border flex flex-col p-[14px] shrink-0">
       <div className="px-2 pt-[10px] pb-[22px]">
-        <SignaLogo />
+        <Link to="/" aria-label="Inicio Signa">
+          <SignaLogo />
+        </Link>
       </div>
 
       <div className="flex flex-col gap-[2px] flex-1">

@@ -10,6 +10,7 @@ interface TranscriptionPanelProps {
   status: 'idle' | 'running' | 'error';
   onSave?: () => void;
   onClear?: () => void;
+  onWordChange?: (newWord: string) => void;
   saving?: boolean;
 }
 
@@ -18,6 +19,7 @@ export function TranscriptionPanel({
   status,
   onSave,
   onClear,
+  onWordChange,
   saving = false,
 }: TranscriptionPanelProps) {
   const { toast } = useToast();
@@ -63,9 +65,19 @@ export function TranscriptionPanel({
       </div>
       <div className="px-6 py-8 min-h-[80px] flex items-center justify-center">
         {word ? (
-          <span className="font-serif italic text-ink text-32 tracking-tighter1 text-center break-all">
+          <span
+            className="font-serif italic text-ink text-32 tracking-tighter1 text-center break-all outline-none uppercase focus:bg-surface2/50 focus:rounded-8 focus:px-3 focus:py-2 cursor-text"
+            contentEditable={!!onWordChange}
+            suppressContentEditableWarning
+            role={onWordChange ? 'textbox' : undefined}
+            aria-label={onWordChange ? 'Editar transcripción' : undefined}
+            title={onWordChange ? 'Haz clic para editar' : undefined}
+            onBlur={(e) => onWordChange?.((e.currentTarget.textContent ?? '').toUpperCase())}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') { e.preventDefault(); (e.currentTarget as HTMLElement).blur(); }
+            }}
+          >
             {word}
-            {status === 'running' && <span className="caret-blink">|</span>}
           </span>
         ) : (
           <span className="font-serif italic text-ink5 text-17 tracking-tight1 text-center">
@@ -86,7 +98,7 @@ export function TranscriptionPanel({
             disabled={saving}
             onClick={onSave}
           >
-            {saving ? 'Guardando…' : 'Guardar'}
+            {saving ? 'Guardando…' : 'Guardar al historial'}
           </Button>
         </div>
       )}
