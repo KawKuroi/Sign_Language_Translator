@@ -19,40 +19,42 @@ export function NavDesktop({ dark = false }: NavDesktopProps) {
   return (
     <nav
       className={cn(
-        'h-16 flex items-center justify-between px-10 shrink-0 border-b',
+        'h-16 shrink-0 border-b px-10',
         dark ? 'bg-black border-white/10' : 'bg-surface border-border',
       )}
     >
-      <Link to="/" aria-label="Inicio Signa">
-        <SignaLogo dark={dark} />
-      </Link>
-      <div className="flex gap-8 items-center">
-        {pages.map((p) => {
-          const active = p.match(pathname);
-          return (
-            <Link
-              key={p.to}
-              to={p.to}
-              className={cn(
-                'font-sans text-13 tracking-tight05 transition-colors',
-                active
-                  ? dark
-                    ? 'text-white font-semibold'
-                    : 'text-ink font-semibold'
-                  : dark
-                    ? 'text-white/60 hover:text-white font-medium'
-                    : 'text-ink3 hover:text-ink font-medium',
-              )}
-            >
-              {p.label}
-            </Link>
-          );
-        })}
-      </div>
-      <div className="flex items-center gap-3">
-        <Button size="md" variant={dark ? 'white' : 'primary'} onClick={() => navigate('/app')}>
-          Empezar
-        </Button>
+      <div className="max-w-[1240px] mx-auto h-full flex items-center justify-between">
+        <Link to="/" aria-label="Inicio Signa">
+          <SignaLogo dark={dark} />
+        </Link>
+        <div className="flex gap-8 items-center">
+          {pages.map((p) => {
+            const active = p.match(pathname);
+            return (
+              <Link
+                key={p.to}
+                to={p.to}
+                className={cn(
+                  'font-sans text-13 tracking-tight05 transition-colors',
+                  active
+                    ? dark
+                      ? 'text-white font-semibold'
+                      : 'text-ink font-semibold'
+                    : dark
+                      ? 'text-white/60 hover:text-white font-medium'
+                      : 'text-ink3 hover:text-ink font-medium',
+                )}
+              >
+                {p.label}
+              </Link>
+            );
+          })}
+        </div>
+        <div className="flex items-center gap-3">
+          <Button size="md" variant={dark ? 'white' : 'primary'} onClick={() => navigate('/app')}>
+            Empezar
+          </Button>
+        </div>
       </div>
     </nav>
   );

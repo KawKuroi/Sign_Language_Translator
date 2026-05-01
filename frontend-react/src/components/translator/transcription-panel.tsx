@@ -63,10 +63,10 @@ export function TranscriptionPanel({
           </button>
         </div>
       </div>
-      <div className="px-6 py-8 min-h-[80px] flex items-center justify-center">
+      <div className="px-6 py-6 min-h-[88px] flex items-center justify-center">
         {word ? (
           <span
-            className="font-serif italic text-ink text-32 tracking-tighter1 text-center break-all outline-none uppercase focus:bg-surface2/50 focus:rounded-8 focus:px-3 focus:py-2 cursor-text"
+            className="font-serif italic text-ink text-44 tracking-tighter1 text-center break-all outline-none uppercase leading-none focus:bg-surface2/50 focus:rounded-8 focus:px-3 focus:py-2 cursor-text"
             contentEditable={!!onWordChange}
             suppressContentEditableWarning
             role={onWordChange ? 'textbox' : undefined}
@@ -80,7 +80,7 @@ export function TranscriptionPanel({
             {word}
           </span>
         ) : (
-          <span className="font-serif italic text-ink5 text-17 tracking-tight1 text-center">
+          <span className="font-serif italic text-ink5 text-20 tracking-tight1 text-center">
             La traducción aparecerá aquí cuando se detecten gestos…
           </span>
         )}

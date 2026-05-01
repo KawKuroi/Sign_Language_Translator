@@ -10,7 +10,7 @@ export function MobileHeader() {
   return (
     <header className="bg-surface border-b border-border px-5 py-[14px] flex items-center justify-between shrink-0">
       <Link to="/" aria-label="Inicio Signa">
-        <SignaLogo size={26} />
+        <SignaLogo size={32} />
       </Link>
       <div className="flex items-center gap-2">
         <button

@@ -121,29 +121,34 @@ function ContactForm() {
 
 function AboutDesktop() {
   return (
-    <div className="bg-bg font-sans w-full">
+    <div className="bg-bg font-sans w-full overflow-x-hidden">
       <NavDesktop />
 
       {/* Quién está detrás */}
-      <section className="px-20 pt-[88px] pb-16 grid grid-cols-2 gap-20 items-end">
-        <div>
-          <SectionLabel>·01 · Quién está detrás</SectionLabel>
-          <h1 className="font-sans text-80 font-semibold text-ink leading-[0.95] tracking-tightest mt-5">
-            Un proyecto<br />
-            <span className="font-serif italic font-normal">en solitario</span>.
-          </h1>
+      <section className="px-10 pt-[88px] pb-16">
+        <div className="max-w-[1240px] mx-auto grid grid-cols-2 gap-20 items-end">
+          <div>
+            <SectionLabel>·01 · Quién está detrás</SectionLabel>
+            <h1 className="font-sans text-72 font-semibold text-ink leading-[0.95] tracking-tightest mt-5">
+              Un proyecto<br />
+              <span className="font-serif italic font-normal">en solitario</span>.
+            </h1>
+          </div>
+          <p className="font-sans text-17 text-ink2 leading-[1.6] max-w-[480px]">
+            Signa nació como un experimento personal sobre cómo la IA puede acortar distancias.
+            Lo construyo en mis horas libres, con Claude Code como copiloto, y con la convicción
+            de que la accesibilidad no debería esperar a tener un equipo grande detrás.
+          </p>
         </div>
-        <p className="font-sans text-17 text-ink2 leading-[1.6] max-w-[480px]">
-          Signa nació como un experimento personal sobre cómo la IA puede acortar distancias.
-          Lo construyo en mis horas libres, con Claude Code como copiloto, y con la convicción
-          de que la accesibilidad no debería esperar a tener un equipo grande detrás.
-        </p>
       </section>
 
-      <Divider className="mx-20" />
+      <div className="max-w-[1240px] mx-auto px-10">
+        <Divider />
+      </div>
 
       {/* El equipo */}
-      <section className="px-20 py-14">
+      <section className="px-10 py-14">
+        <div className="max-w-[1240px] mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h2 className="font-sans text-22 font-semibold text-ink tracking-tight1">El equipo</h2>
           <SectionLabel>1 humano · 1 IA</SectionLabel>
@@ -199,41 +204,49 @@ function AboutDesktop() {
             </div>
           </div>
         </div>
+        </div>
       </section>
 
       {/* Tres servicios */}
-      <section className="px-20 pb-20">
-        <SectionLabel>·02 · Cómo se construye</SectionLabel>
-        <h2 className="font-sans text-48 font-semibold text-ink mt-3 mb-12 tracking-tighter2 leading-[1.05]">
-          Tres servicios, <span className="font-serif italic font-normal">una idea</span>
-        </h2>
-        <div className="grid grid-cols-3 border border-border rounded-16 overflow-hidden">
-          {stackCards.map((s, i) => (
-            <div key={s.tag} className={`p-9 bg-surface ${i < 2 ? 'border-r border-border' : ''}`}>
-              <div className="flex items-center justify-between mb-7">
-                <SectionLabel emphasized>{s.tag}</SectionLabel>
-                <span className="font-mono text-10 text-ink4 tracking-wide1">0{i + 1}</span>
+      <section className="px-10 pb-20">
+        <div className="max-w-[1240px] mx-auto">
+          <SectionLabel>·02 · Cómo se construye</SectionLabel>
+          <h2 className="font-sans text-48 font-semibold text-ink mt-3 mb-12 tracking-tighter2 leading-[1.05]">
+            Tres servicios, <span className="font-serif italic font-normal">una idea</span>
+          </h2>
+          <div className="grid grid-cols-3 border border-border rounded-16 overflow-hidden">
+            {stackCards.map((s, i) => (
+              <div key={s.tag} className={`p-9 bg-surface ${i < 2 ? 'border-r border-border' : ''}`}>
+                <div className="flex items-center justify-between mb-7">
+                  <SectionLabel emphasized>{s.tag}</SectionLabel>
+                  <span className="font-mono text-10 text-ink4 tracking-wide1">0{i + 1}</span>
+                </div>
+                <h3 className="font-sans text-20 font-semibold text-ink mb-2 tracking-tight1">{s.stack}</h3>
+                <p className="font-sans text-14 text-ink3 leading-[1.6]">{s.desc}</p>
               </div>
-              <h3 className="font-sans text-20 font-semibold text-ink mb-2 tracking-tight1">{s.stack}</h3>
-              <p className="font-sans text-14 text-ink3 leading-[1.6]">{s.desc}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Contacto */}
-      <section className="px-20 pb-24 items-start" style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '80px' }}>
-        <div>
-          <SectionLabel>·03 · Contacto</SectionLabel>
-          <h2 className="font-sans text-36 font-semibold text-ink mt-[14px] mb-4 tracking-tighter2 leading-[1.05]">
-            Retroalimenta<span className="font-serif italic font-normal">ción</span>
-          </h2>
-          <p className="font-sans text-14 text-ink3 leading-[1.6]">
-            Tu opinión me ayuda a mejorar Signa. ¿Tienes una sugerencia, encontraste un bug o
-            quieres saludar? Escríbeme.
-          </p>
+      <section className="px-10 pb-24">
+        <div
+          className="max-w-[1240px] mx-auto items-start"
+          style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '120px' }}
+        >
+          <div>
+            <SectionLabel>·03 · Contacto</SectionLabel>
+            <h2 className="font-sans text-36 font-semibold text-ink mt-[14px] mb-4 tracking-tighter2 leading-[1.05]">
+              Retroalimenta<span className="font-serif italic font-normal">ción</span>
+            </h2>
+            <p className="font-sans text-14 text-ink3 leading-[1.6]">
+              Tu opinión me ayuda a mejorar Signa. ¿Tienes una sugerencia, encontraste un bug o
+              quieres saludar? Escríbeme.
+            </p>
+          </div>
+          <ContactForm />
         </div>
-        <ContactForm />
       </section>
 
       <FooterDesktop />

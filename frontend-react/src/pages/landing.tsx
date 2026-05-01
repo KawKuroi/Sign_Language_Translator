@@ -30,7 +30,7 @@ const GITHUB_URL = 'https://github.com/KawKuroi';
 function HeroPreview() {
   return (
     <div
-      className="relative aspect-[4/3] rounded-16 overflow-hidden flex items-center justify-center"
+      className="relative aspect-[3/2] rounded-16 overflow-hidden flex items-center justify-center"
       style={{ background: 'radial-gradient(ellipse at center, #1a1a1a 0%, #000 80%)' }}
     >
       <div className="opacity-20 text-white">
@@ -92,11 +92,11 @@ const faqs = [
 function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border-b border-border">
+    <div className="border-b border-border first:border-t">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex justify-between items-center py-[22px] text-left"
+        className="w-full flex justify-between items-center py-7 text-left"
         aria-expanded={open}
       >
         <span className="font-sans font-medium text-16 text-ink tracking-tight1">{q}</span>
@@ -105,7 +105,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
         </span>
       </button>
       {open && (
-        <p className="font-sans text-14 text-ink3 leading-[23px] pb-[22px] pr-8">{a}</p>
+        <p className="font-sans text-15 text-ink3 leading-[1.65] pb-7 pr-8 -mt-1">{a}</p>
       )}
     </div>
   );
@@ -114,24 +114,25 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 function DemoSection() {
   const { toast } = useToast();
   return (
-    <section className="px-20 pb-20">
-      <div className="grid grid-cols-2 gap-20 mb-12 items-end">
-        <div>
-          <SectionLabel>·01 · DEMO</SectionLabel>
-          <h2 className="font-sans text-48 font-semibold text-ink mt-3 tracking-tighter2 leading-[1.05]">
-            Mira Signa <span className="font-serif italic font-normal">en acción</span>
-          </h2>
+    <section className="px-10 pb-20">
+      <div className="max-w-[1100px] mx-auto">
+        <div className="grid grid-cols-2 gap-20 mb-12 items-end">
+          <div>
+            <SectionLabel>·01 · DEMO</SectionLabel>
+            <h2 className="font-sans text-48 font-semibold text-ink mt-3 tracking-tighter2 leading-[1.05]">
+              Mira Signa <span className="font-serif italic font-normal">en acción</span>
+            </h2>
+          </div>
+          <p className="font-sans text-16 text-ink2 leading-[1.6]">
+            Observa cómo nuestra tecnología procesa gestos complejos y los convierte en texto o voz
+            instantáneamente.
+          </p>
         </div>
-        <p className="font-sans text-16 text-ink2 leading-[1.6]">
-          Observa cómo nuestra tecnología procesa gestos complejos y los convierte en texto o voz
-          instantáneamente.
-        </p>
-      </div>
 
-      <div
-        className="relative w-full rounded-20 overflow-hidden bg-black flex items-center justify-center border border-border"
-        style={{ aspectRatio: '16/9' }}
-      >
+        <div
+          className="relative w-full rounded-20 overflow-hidden bg-black flex items-center justify-center border border-border"
+          style={{ aspectRatio: '21/9' }}
+        >
         <div
           className="absolute inset-0 flex items-center justify-center"
           style={{ background: 'radial-gradient(ellipse at center, #1a1a1a 0%, #000 80%)' }}
@@ -155,6 +156,7 @@ function DemoSection() {
             <span className="font-mono text-11 text-white/50 tracking-wide1">05:00</span>
           </div>
         </div>
+        </div>
       </div>
     </section>
   );
@@ -166,8 +168,8 @@ function LandingDesktop() {
       <NavDesktop />
 
       {/* Hero */}
-      <section className="px-20 pt-[88px] pb-[72px]">
-        <div className="grid gap-14 items-start" style={{ gridTemplateColumns: '540px 1fr' }}>
+      <section className="px-10 pt-[88px] pb-[72px]">
+        <div className="max-w-[1240px] mx-auto grid gap-14 items-start" style={{ gridTemplateColumns: '540px 1fr' }}>
           <div>
             <div className="flex gap-2 mb-9">
               <Badge variant="dark">
@@ -208,21 +210,25 @@ function LandingDesktop() {
               <Metric value="ASL" label="Señas estáticas" />
             </div>
           </div>
-          <div>
-            <HeroPreview />
+          <div className="flex justify-end">
+            <div className="w-full max-w-[520px]">
+              <HeroPreview />
+            </div>
           </div>
         </div>
       </section>
 
       {/* Construido con */}
-      <div className="px-20 py-5 border-t border-b border-border flex items-center gap-7">
-        <SectionLabel>Construido con</SectionLabel>
-        {['React + TS', 'Spring Boot', 'FastAPI', 'TensorFlow', 'MediaPipe', 'Docker'].map((t, i, arr) => (
-          <span key={t} className="flex items-center gap-7">
-            <span className="font-mono font-medium text-12 text-ink2" style={{ letterSpacing: '-0.01em' }}>{t}</span>
-            {i < arr.length - 1 && <span className="w-[3px] h-[3px] rounded-full bg-ink5 shrink-0" />}
-          </span>
-        ))}
+      <div className="px-10 py-5 border-t border-b border-border">
+        <div className="max-w-[1240px] mx-auto flex items-center gap-7">
+          <SectionLabel>Construido con</SectionLabel>
+          {['React + TS', 'Spring Boot', 'FastAPI', 'TensorFlow', 'MediaPipe', 'Docker'].map((t, i, arr) => (
+            <span key={t} className="flex items-center gap-7">
+              <span className="font-mono font-medium text-12 text-ink2" style={{ letterSpacing: '-0.01em' }}>{t}</span>
+              {i < arr.length - 1 && <span className="w-[3px] h-[3px] rounded-full bg-ink5 shrink-0" />}
+            </span>
+          ))}
+        </div>
       </div>
 
       {/* Demo */}
@@ -231,7 +237,8 @@ function LandingDesktop() {
       </div>
 
       {/* Capacidades */}
-      <section className="px-20 pb-20">
+      <section className="px-10 pb-20">
+        <div className="max-w-[1240px] mx-auto">
         <SectionLabel>·02 · Capacidades</SectionLabel>
         <h2 className="font-sans text-48 font-semibold text-ink mt-3 mb-12 tracking-tighter2 leading-[1.05] max-w-2xl">
           Tecnología discreta, <span className="font-serif italic font-normal">impacto profundo</span>
@@ -256,10 +263,12 @@ function LandingDesktop() {
             );
           })}
         </div>
+        </div>
       </section>
 
       {/* Comunidad */}
-      <section className="px-20 pb-[88px]">
+      <section className="px-10 pb-[88px]">
+        <div className="max-w-[1240px] mx-auto">
         <div
           className="bg-black text-white rounded-24 relative overflow-hidden"
           style={{ padding: '72px 64px' }}
@@ -300,20 +309,26 @@ function LandingDesktop() {
             </div>
           </div>
         </div>
+        </div>
       </section>
 
       {/* FAQ */}
-      <section className="px-20 pb-24" style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '80px' }}>
-        <div>
-          <SectionLabel>·04 · Preguntas</SectionLabel>
-          <h2 className="font-sans text-40 font-semibold text-ink mt-3 tracking-tighter2 leading-[1.05]">
-            Preguntas <span className="font-serif italic font-normal">frecuentes</span>
-          </h2>
-        </div>
-        <div>
-          {faqs.map((f) => (
-            <FAQItem key={f.q} q={f.q} a={f.a} />
-          ))}
+      <section className="px-10 pt-6 pb-32">
+        <div
+          className="max-w-[1240px] mx-auto"
+          style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '120px' }}
+        >
+          <div>
+            <SectionLabel>·04 · Preguntas</SectionLabel>
+            <h2 className="font-sans text-40 font-semibold text-ink mt-3 tracking-tighter2 leading-[1.05]">
+              Preguntas <span className="font-serif italic font-normal">frecuentes</span>
+            </h2>
+          </div>
+          <div>
+            {faqs.map((f) => (
+              <FAQItem key={f.q} q={f.q} a={f.a} />
+            ))}
+          </div>
         </div>
       </section>
 
@@ -327,7 +342,7 @@ function LandingMobile() {
   return (
     <div className="bg-bg font-sans">
       <nav className="h-14 bg-surface border-b border-border flex items-center justify-between px-5 sticky top-0 z-10">
-        <SignaLogo size={26} />
+        <SignaLogo size={32} />
         <button
           type="button"
           aria-label="Menú"
@@ -445,7 +460,7 @@ function LandingMobile() {
 
       <footer className="bg-surface border-t border-border px-5 pt-7 pb-8 text-center">
         <div className="flex justify-center">
-          <SignaLogo size={26} />
+          <SignaLogo size={32} />
         </div>
       </footer>
     </div>

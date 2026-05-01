@@ -44,7 +44,7 @@ export const WebcamView = forwardRef<Webcam, WebcamViewProps>(
         <div className="absolute bottom-3 left-3 right-3 bg-black/60 backdrop-blur-lg border border-white/8 rounded-8 px-[14px] py-[10px] flex items-center justify-between">
           <div>
             <p className="font-mono text-9 text-white/50 mb-[4px] tracking-wide3">DETECTADO</p>
-            <p className="font-serif italic text-white text-22 leading-none">{currentLetter}</p>
+            <p className="font-serif italic text-white text-32 leading-none">{currentLetter}</p>
           </div>
           <Badge variant="outline_white">
             {(confidence * 100).toFixed(0)}%
