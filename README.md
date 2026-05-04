@@ -120,13 +120,3 @@ El modelo fue entrenado en Google Colab. El notebook contiene el flujo completo:
 **[Ver Notebook en Google Colab](https://colab.research.google.com/drive/1qajMkPVaFqv2pbhziVAZPs_v8tdftteS)**
 
 El modelo se distribuye como `asl_model.keras` en el repo. Durante el build de Docker se convierte automáticamente a formato TFLite (`asl_model.tflite`) para no requerir TensorFlow en la imagen de producción.
-
----
-
-## Desarrollo Local por Servicio
-
-Cada carpeta tiene su propio README con instrucciones detalladas:
-
-- [`frontend-react/README.md`](frontend-react/README.md)
-- [`backend-springboot/README.md`](backend-springboot/README.md)
-- [`ai-service-python/README.md`](ai-service-python/README.md)
