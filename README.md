@@ -4,15 +4,6 @@ Traductor de Lenguaje de Señas ASL en tiempo real mediante webcam. El frontend 
 
 ## Arquitectura
 
-```
-Browser (webcam)
-  └─ POST /translate ──► Spring Boot :8080
-                              └─ HTTP ──► FastAPI AI Service :8000
-                                              ├─ MediaPipe → 21 landmarks (63 floats)
-                                              ├─ Normalización relativa a la muñeca
-                                              └─ Red densa (256→128→64→24) → letra ASL
-```
-
 | Servicio | Carpeta | Puerto |
 |---|---|---|
 | Frontend (React + Vite → nginx) | `frontend-react/` | 80 |
