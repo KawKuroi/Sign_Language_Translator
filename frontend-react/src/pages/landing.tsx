@@ -27,38 +27,40 @@ import { useState, type ReactNode } from 'react';
 
 const GITHUB_URL = 'https://github.com/KawKuroi';
 
-function HeroPreview() {
+function HeroPreview({ size = 'md' }: { size?: 'md' | 'lg' } = {}) {
+  const lg = size === 'lg';
   return (
     <div
       className="relative aspect-[3/2] rounded-16 overflow-hidden flex items-center justify-center"
       style={{ background: 'radial-gradient(ellipse at center, #1a1a1a 0%, #000 80%)' }}
     >
       <div className="opacity-20 text-white">
-        <IcCamera s={72} w={1} />
+        <IcCamera s={lg ? 88 : 72} w={1} />
       </div>
-      <div className="absolute top-3 left-3 flex items-center gap-[6px] bg-white/8 backdrop-blur-md border border-white/12 rounded-full px-[9px] py-1">
+      <div className={`absolute ${lg ? 'top-4 left-4' : 'top-3 left-3'} flex items-center gap-[6px] bg-white/8 backdrop-blur-md border border-white/12 rounded-full ${lg ? 'px-[11px] py-[5px]' : 'px-[9px] py-1'}`}>
         <span className="w-[5px] h-[5px] rounded-full bg-ok pulse-dot" />
-        <span className="font-mono text-9 font-medium text-white tracking-wide3">EN VIVO</span>
+        <span className={`font-mono ${lg ? 'text-10' : 'text-9'} font-medium text-white tracking-wide3`}>EN VIVO</span>
       </div>
-      <div className="absolute top-3 right-3">
-        <span className="font-mono text-9 text-white/40 tracking-wide1">42.331 / -71.028</span>
+      <div className={`absolute ${lg ? 'top-4 right-4' : 'top-3 right-3'}`}>
+        <span className={`font-mono ${lg ? 'text-10' : 'text-9'} text-white/40 tracking-wide1`}>42.331 / -71.028</span>
       </div>
-      <div className="absolute bottom-3 left-3 right-3 bg-black/70 backdrop-blur-lg border border-white/8 rounded-8 px-[14px] py-[10px]">
+      <div className={`absolute ${lg ? 'bottom-4 left-4 right-4' : 'bottom-3 left-3 right-3'} bg-black/70 backdrop-blur-lg border border-white/8 rounded-8 ${lg ? 'px-[18px] py-[13px]' : 'px-[14px] py-[10px]'}`}>
         <div className="flex justify-between items-start">
-          <p className="font-mono text-9 text-white/50 mb-1 tracking-wide3">TRADUCCIÓN · ASL → ES</p>
-          <span className="font-mono text-9 text-white/40">00:42</span>
+          <p className={`font-mono ${lg ? 'text-10' : 'text-9'} text-white/50 mb-1 tracking-wide3`}>TRADUCCIÓN · ASL → ES</p>
+          <span className={`font-mono ${lg ? 'text-10' : 'text-9'} text-white/40`}>00:42</span>
         </div>
-        <p className="font-serif italic font-normal text-17 text-white">"H – E – L – L – O"</p>
+        <p className={`font-serif italic font-normal ${lg ? 'text-22' : 'text-17'} text-white`}>"H – E – L – L – O"</p>
       </div>
     </div>
   );
 }
 
-function Metric({ value, label }: { value: string; label: string }) {
+function Metric({ value, label, size = 'md' }: { value: string; label: string; size?: 'md' | 'lg' }) {
+  const lg = size === 'lg';
   return (
     <div>
-      <p className="font-serif italic font-normal text-28 text-ink leading-none" style={{ letterSpacing: '-0.02em' }}>{value}</p>
-      <p className="font-mono text-10 text-ink4 tracking-wide2 mt-[6px] uppercase">{label}</p>
+      <p className={`font-serif italic font-normal ${lg ? 'text-32' : 'text-28'} text-ink leading-none`} style={{ letterSpacing: '-0.02em' }}>{value}</p>
+      <p className={`font-mono ${lg ? 'text-11' : 'text-10'} text-ink4 tracking-wide2 mt-[6px] uppercase`}>{label}</p>
     </div>
   );
 }
@@ -169,7 +171,7 @@ function LandingDesktop() {
 
       {/* Hero */}
       <section className="px-10 pt-[88px] pb-[72px]">
-        <div className="max-w-[1240px] mx-auto grid gap-14 items-start" style={{ gridTemplateColumns: '540px 1fr' }}>
+        <div className="max-w-[1440px] mx-auto grid gap-14 items-start" style={{ gridTemplateColumns: '540px 1fr' }}>
           <div>
             <div className="flex gap-2 mb-9">
               <Badge variant="dark">
@@ -220,7 +222,7 @@ function LandingDesktop() {
 
       {/* Construido con */}
       <div className="px-10 py-5 border-t border-b border-border">
-        <div className="max-w-[1240px] mx-auto flex items-center gap-7">
+        <div className="max-w-[1440px] mx-auto flex items-center gap-7">
           <SectionLabel>Construido con</SectionLabel>
           {['React + TS', 'Spring Boot', 'FastAPI', 'TensorFlow', 'MediaPipe', 'Docker'].map((t, i, arr) => (
             <span key={t} className="flex items-center gap-7">
@@ -238,7 +240,7 @@ function LandingDesktop() {
 
       {/* Capacidades */}
       <section className="px-10 pb-20">
-        <div className="max-w-[1240px] mx-auto">
+        <div className="max-w-[1440px] mx-auto">
         <SectionLabel>·02 · Capacidades</SectionLabel>
         <h2 className="font-sans text-48 font-semibold text-ink mt-3 mb-12 tracking-tighter2 leading-[1.05] max-w-2xl">
           Tecnología discreta, <span className="font-serif italic font-normal">impacto profundo</span>
@@ -268,7 +270,7 @@ function LandingDesktop() {
 
       {/* Comunidad */}
       <section className="px-10 pb-[88px]">
-        <div className="max-w-[1240px] mx-auto">
+        <div className="max-w-[1440px] mx-auto">
         <div
           className="bg-black text-white rounded-24 relative overflow-hidden"
           style={{ padding: '72px 64px' }}
@@ -315,7 +317,7 @@ function LandingDesktop() {
       {/* FAQ */}
       <section className="px-10 pt-6 pb-32">
         <div
-          className="max-w-[1240px] mx-auto"
+          className="max-w-[1440px] mx-auto"
           style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '120px' }}
         >
           <div>
