@@ -15,6 +15,10 @@ Traductor de lenguaje de señas ASL (A–Y) en tiempo real mediante webcam. Capt
   <img src="docs/screenshots/demo.gif" alt="Demo del traductor reconociendo señas ASL en tiempo real" width="720">
 </p>
 
+| Landing | Traductor |
+|:---:|:---:|
+| <img src="docs/screenshots/landing.png" alt="Landing page" width="420"> | <img src="docs/screenshots/traductor.png" alt="Traductor en acción" width="420"> |
+
 ---
 
 ## Inicio Rápido
@@ -34,18 +38,6 @@ docker compose up --build
 ```bash
 docker compose down
 ```
-
----
-
-## Arquitectura
-
-| Servicio | Carpeta | Puerto | Tests |
-|---|---|---|---|
-| Frontend (React + Vite → nginx) | `frontend-react/` | 80 | 50 / 50 |
-| Backend (Spring Boot) | `backend-springboot/` | 8080 | 25 / 25 |
-| AI Service (FastAPI) | `ai-service-python/` | 8000 | 5 / 5 |
-
-Pipeline: webcam → frame cada 2 s → Spring Boot → MediaPipe (21 landmarks) → red densa (256→128→64→24) → letra + confianza → historial por usuario.
 
 ---
 
