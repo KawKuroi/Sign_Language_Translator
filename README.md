@@ -2,6 +2,44 @@
 
 Traductor de Lenguaje de Señas ASL en tiempo real mediante webcam. El frontend captura frames, los envía al backend Spring Boot, y el servicio de IA extrae landmarks con MediaPipe y clasifica la seña con una red neuronal densa (97 % de accuracy en el set de validación).
 
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.1-6DB33F?logo=springboot&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-Python_3.10-009688?logo=fastapi&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-80%2F80%20passing-brightgreen)
+![Accuracy](https://img.shields.io/badge/accuracy-97%25-success)
+
+## Demo
+
+<p align="center">
+  <img src="docs/screenshots/demo.gif" alt="Demo del traductor reconociendo señas ASL en tiempo real" width="720">
+</p>
+
+> Reconocimiento de letras ASL desde la webcam con extracción de landmarks y composición de palabras en tiempo real.
+
+---
+
+## Tabla de Contenidos
+
+- [Screenshots](#screenshots)
+- [Arquitectura](#arquitectura)
+- [Inicio Rápido con Docker](#inicio-rápido-con-docker)
+- [Endpoints](#endpoints)
+- [Tecnologías](#tecnologías)
+- [Estado del Proyecto](#estado-del-proyecto)
+- [Entrenamiento del Modelo](#entrenamiento-del-modelo)
+
+---
+
+## Screenshots
+
+| Landing | Traductor |
+|:---:|:---:|
+| <img src="docs/screenshots/landing.png" alt="Landing page" width="420"> | <img src="docs/screenshots/traductor.png" alt="Traductor en acción" width="420"> |
+| Página de inicio del producto | Detección de seña en vivo |
+
+---
+
 ## Arquitectura
 
 | Servicio | Carpeta | Puerto |
@@ -43,7 +81,10 @@ docker compose down   # detiene y elimina los contenedores
 
 ## Endpoints
 
-### Backend `POST /translate` (público)
+<details>
+<summary><b>Backend</b> — Traducción, autenticación e historial</summary>
+
+### `POST /translate` (público)
 
 ```json
 // Body
@@ -53,21 +94,26 @@ docker compose down   # detiene y elimina los contenedores
 { "handFound": true, "letter": "A", "confidence": 0.97, "top": [...] }
 ```
 
-### Backend — Autenticación (pública)
+### Autenticación (pública)
 
 | Método | Ruta | Descripción |
 |---|---|---|
 | `POST` | `/auth/register` | Registro. Body: `{ "email", "password" }`. Devuelve `{ "token", "email" }` |
 | `POST` | `/auth/login` | Login con los mismos campos. Devuelve JWT. |
 
-### Backend — Historial (requiere `Authorization: Bearer <token>`)
+### Historial (requiere `Authorization: Bearer <token>`)
 
 | Método | Ruta | Descripción |
 |---|---|---|
 | `POST` | `/history` | Guarda texto de la sesión. Body: `{ "text": "HELLO WORLD" }` |
 | `GET` | `/history` | Historial del usuario (más reciente primero) |
 
-### AI Service `POST /predict`
+</details>
+
+<details>
+<summary><b>AI Service</b> — Inferencia directa</summary>
+
+### `POST /predict`
 
 ```json
 // Body
@@ -81,6 +127,8 @@ docker compose down   # detiene y elimina los contenedores
 ```
 
 Letras soportadas: **A–Y** (J y Z excluidas por requerir movimiento).
+
+</details>
 
 ---
 
@@ -105,11 +153,13 @@ Letras soportadas: **A–Y** (J y Z excluidas por requerir movimiento).
 
 ## Estado del Proyecto
 
-**Frontend** — Implementación completa del design system Signa con React 18 + Tailwind CSS 3. Incluye rutas (Landing, Traductor, Historial, About, Auth), flujo de cámara en tiempo real, historial persistente con JWT, responsive desktop+mobile, y 50/50 tests pasando (vitest + Testing Library + MSW).
+| Servicio | Stack principal | Tests | Detalle |
+|---|---|---|---|
+| **Frontend** | React 18 + Tailwind CSS 3, design system Signa | 50 / 50 | [frontend-react/README.md](frontend-react/README.md) |
+| **Backend** | Spring Boot 3.1 + JWT + H2 | 25 / 25 | [backend-springboot/README.md](backend-springboot/README.md) |
+| **AI Service** | FastAPI + MediaPipe + TFLite | 5 / 5 | [ai-service-python/README.md](ai-service-python/README.md) |
 
-**Backend** — Spring Boot 3.1 con autenticación JWT, endpoints `/auth/**`, `/translate`, `/history`, H2 embebida. 25/25 tests pasando.
-
-**AI Service** — FastAPI + MediaPipe + TFLite. Extracción de 21 landmarks, red neuronal densa (97% accuracy en validación), 5 tests cubriendo inferencia y errores.
+Pipeline end-to-end funcional: webcam → captura cada 2 s → landmarks → red densa → letra reconocida → historial persistente por usuario.
 
 ---
 
