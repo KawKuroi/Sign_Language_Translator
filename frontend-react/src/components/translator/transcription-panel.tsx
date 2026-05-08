@@ -38,15 +38,15 @@ export function TranscriptionPanel({
 
   return (
     <div className="bg-surface border border-border rounded-12 overflow-hidden">
-      <div className="px-[18px] py-3 border-b border-border flex items-center justify-between">
-        <div className="flex items-center gap-[10px]">
+      <div className="px-5 py-4 border-b border-border flex items-center justify-between">
+        <div className="flex items-center gap-3">
           <SectionLabel emphasized>Transcripción</SectionLabel>
-          <span className="font-mono text-10 text-ink4 tracking-wide1">ASL → ES</span>
+          <span className="font-mono text-11 text-ink4 tracking-wide1">ASL → ES</span>
         </div>
-        <div className="flex items-center gap-[14px]">
-          <div className="flex items-center gap-[6px]">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <span
-              className={cn('w-[6px] h-[6px] rounded-full', status === 'running' && 'pulse-dot')}
+              className={cn('w-[7px] h-[7px] rounded-full', status === 'running' && 'pulse-dot')}
               style={{ backgroundColor: dotColor }}
               aria-hidden="true"
             />
@@ -59,14 +59,14 @@ export function TranscriptionPanel({
             onClick={handleCopy}
             className="text-ink4 hover:text-ink p-1 disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            <IcCopy s={13} w={1.5} />
+            <IcCopy s={15} w={1.5} />
           </button>
         </div>
       </div>
-      <div className="px-6 py-6 min-h-[88px] flex items-center justify-center">
+      <div className="px-7 py-8 min-h-[110px] flex items-center justify-center">
         {word ? (
           <span
-            className="font-serif italic text-ink text-44 tracking-tighter1 text-center break-all outline-none uppercase leading-none focus:bg-surface2/50 focus:rounded-8 focus:px-3 focus:py-2 cursor-text"
+            className="font-serif italic text-ink text-56 tracking-tighter1 text-center break-all outline-none uppercase leading-none focus:bg-surface2/50 focus:rounded-8 focus:px-3 focus:py-2 cursor-text"
             contentEditable={!!onWordChange}
             suppressContentEditableWarning
             role={onWordChange ? 'textbox' : undefined}
@@ -80,21 +80,21 @@ export function TranscriptionPanel({
             {word}
           </span>
         ) : (
-          <span className="font-serif italic text-ink5 text-20 tracking-tight1 text-center">
+          <span className="font-serif italic text-ink5 text-22 tracking-tight1 text-center">
             La traducción aparecerá aquí cuando se detecten gestos…
           </span>
         )}
       </div>
       {word && (
-        <div className="px-[18px] py-3 border-t border-border flex items-center justify-end gap-2">
+        <div className="px-5 py-4 border-t border-border flex items-center justify-end gap-2">
           {onClear && (
-            <Button variant="ghost" size="sm" onClick={onClear}>
+            <Button variant="ghost" size="md" onClick={onClear}>
               Limpiar
             </Button>
           )}
           <Button
             variant="primary"
-            size="sm"
+            size="md"
             disabled={saving}
             onClick={onSave}
           >

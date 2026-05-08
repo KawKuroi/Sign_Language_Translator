@@ -49,29 +49,29 @@ function SettingsContent() {
   };
 
   return (
-    <div className="max-w-2xl flex flex-col gap-5">
+    <div className="max-w-3xl flex flex-col gap-6">
       {/* Cuenta */}
-      <div className="bg-surface border border-border rounded-12 p-6">
+      <div className="bg-surface border border-border rounded-12 p-8">
         <SectionLabel emphasized>Cuenta</SectionLabel>
-        <p className="font-mono text-10 text-ink4 tracking-wide2 uppercase mt-5 mb-1">Correo</p>
-        <p className="font-sans text-15 text-ink">{user?.email}</p>
-        <Divider className="my-5" />
-        <Button variant="secondary" size="sm" onClick={handleLogout}>
+        <p className="font-mono text-11 text-ink4 tracking-wide2 uppercase mt-6 mb-2">Correo</p>
+        <p className="font-sans text-17 text-ink">{user?.email}</p>
+        <Divider className="my-6" />
+        <Button variant="secondary" size="md" onClick={handleLogout}>
           Cerrar sesión
         </Button>
       </div>
 
       {/* Datos locales */}
-      <div className="bg-surface border border-border rounded-12 p-6">
+      <div className="bg-surface border border-border rounded-12 p-8">
         <SectionLabel emphasized>Datos locales</SectionLabel>
-        <p className="font-sans text-14 text-ink3 mt-3 leading-[1.6]">
+        <p className="font-sans text-15 text-ink3 mt-4 leading-[1.6]">
           Tu navegador puede guardar hasta 200 traducciones cuando estás sin sesión activa.
           Puedes borrarlas en cualquier momento — no afecta tu historial sincronizado.
         </p>
         <Button
           variant="secondary"
-          size="sm"
-          className="mt-4"
+          size="md"
+          className="mt-5"
           onClick={handleClearLocal}
           disabled={localCount === 0}
         >
@@ -80,12 +80,12 @@ function SettingsContent() {
       </div>
 
       {/* Zona peligrosa */}
-      <div className="bg-surface border border-danger/40 rounded-12 p-6">
+      <div className="bg-surface border border-danger/40 rounded-12 p-8">
         <SectionLabel emphasized className="text-danger">Zona peligrosa</SectionLabel>
-        <h3 className="font-sans text-18 font-semibold text-ink mt-3">
+        <h3 className="font-sans text-22 font-semibold text-ink mt-4">
           Eliminar <span className="font-serif italic font-normal">cuenta</span>
         </h3>
-        <p className="font-sans text-14 text-ink3 mt-2 leading-[1.6]">
+        <p className="font-sans text-15 text-ink3 mt-3 leading-[1.6]">
           Esta acción es permanente e irreversible. Se eliminarán tu cuenta y todo el historial
           sincronizado en el servidor.
         </p>
@@ -93,8 +93,8 @@ function SettingsContent() {
         {confirmStep === 'idle' && (
           <Button
             variant="danger"
-            size="sm"
-            className="mt-4"
+            size="md"
+            className="mt-5"
             onClick={() => setConfirmStep('typing')}
           >
             Eliminar cuenta
@@ -102,27 +102,27 @@ function SettingsContent() {
         )}
 
         {confirmStep === 'typing' && (
-          <div className="mt-4 flex flex-col gap-3">
-            <p className="font-sans text-13 text-ink3">
+          <div className="mt-5 flex flex-col gap-4">
+            <p className="font-sans text-14 text-ink3">
               Escribe tu correo <span className="font-semibold text-ink">{user?.email}</span> para confirmar:
             </p>
             <Input
               value={typed}
               onChange={(e) => setTyped(e.target.value)}
               placeholder={user?.email}
-              className="max-w-sm"
+              className="max-w-md"
             />
             <div className="flex gap-2">
               <Button
                 variant="ghost"
-                size="sm"
+                size="md"
                 onClick={() => { setConfirmStep('idle'); setTyped(''); }}
               >
                 Cancelar
               </Button>
               <Button
                 variant="danger"
-                size="sm"
+                size="md"
                 disabled={typed !== user?.email || deleting}
                 onClick={handleDelete}
               >
@@ -156,7 +156,7 @@ export default function SettingsPage(): ReactNode {
       <AppSidebar />
       <main className="flex-1 flex flex-col overflow-hidden">
         <AppHeader title="Ajustes" />
-        <div className="flex-1 p-6 overflow-auto bg-bg">
+        <div className="flex-1 p-8 overflow-auto bg-bg">
           <SettingsContent />
         </div>
       </main>

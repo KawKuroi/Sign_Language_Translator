@@ -6,20 +6,20 @@ import { SignaLogo } from '@/components/brand/signa-logo';
 export default function NotFoundPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-bg px-6 text-center">
-      <SignaLogo size={32} />
-      <SectionLabel className="mt-10">·404 · Página no encontrada</SectionLabel>
-      <h1 className="font-sans text-48 font-semibold text-ink mt-4 tracking-tighter2 leading-none">
+      <SignaLogo size={40} />
+      <SectionLabel className="mt-12">·404 · Página no encontrada</SectionLabel>
+      <h1 className="font-sans text-68 font-semibold text-ink mt-5 tracking-tighter2 leading-none">
         No <span className="font-serif italic font-normal">existe</span>
       </h1>
-      <p className="font-sans text-15 text-ink3 mt-4 max-w-md">
+      <p className="font-sans text-18 text-ink3 mt-5 max-w-lg">
         La ruta que intentas visitar no está disponible. Vuelve al inicio o abre el traductor.
       </p>
-      <div className="flex gap-3 mt-8">
+      <div className="flex gap-3 mt-10">
         <Link to="/">
-          <Button variant="secondary">Inicio</Button>
+          <Button variant="secondary" size="lg">Inicio</Button>
         </Link>
         <Link to="/app">
-          <Button variant="primary">Abrir traductor</Button>
+          <Button variant="primary" size="lg">Abrir traductor</Button>
         </Link>
       </div>
     </div>

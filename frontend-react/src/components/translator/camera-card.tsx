@@ -40,9 +40,9 @@ export const CameraCard = forwardRef<Webcam, CameraCardProps>(
         <Card
           className="p-3 flex flex-col gap-3 mx-auto w-full"
           style={{
-            minHeight: size === 'desktop' ? 360 : 280,
-            maxWidth: size === 'desktop' ? 720 : '100%',
-            maxHeight: size === 'desktop' ? 540 : 420,
+            minHeight: size === 'desktop' ? 440 : 280,
+            maxWidth: size === 'desktop' ? 880 : '100%',
+            maxHeight: size === 'desktop' ? 660 : 420,
           }}
         >
           <WebcamView
@@ -67,39 +67,39 @@ export const CameraCard = forwardRef<Webcam, CameraCardProps>(
     return (
       <Card
         className="flex items-center justify-center relative overflow-hidden"
-        style={{ minHeight: size === 'desktop' ? 440 : 360 }}
+        style={{ minHeight: size === 'desktop' ? 540 : 360 }}
       >
-        <div className="flex flex-col items-center gap-6 max-w-[420px] text-center px-4">
-          <div className="relative" style={{ width: size === 'desktop' ? 180 : 150, height: size === 'desktop' ? 180 : 150 }}>
+        <div className="flex flex-col items-center gap-7 max-w-[480px] text-center px-4">
+          <div className="relative" style={{ width: size === 'desktop' ? 220 : 150, height: size === 'desktop' ? 220 : 150 }}>
             <div className="absolute inset-0 rounded-full border border-dashed border-ink5" />
             <div
               className="absolute bg-surface2 border border-border rounded-20 flex items-center justify-center text-ink4"
-              style={{ inset: size === 'desktop' ? 22 : 18 }}
+              style={{ inset: size === 'desktop' ? 26 : 18 }}
             >
-              <IcCameraOff s={size === 'desktop' ? 42 : 32} w={1.4} />
+              <IcCameraOff s={size === 'desktop' ? 52 : 32} w={1.4} />
             </div>
           </div>
           <div>
-            <h2 className="font-sans font-semibold text-ink mb-[10px] tracking-tighter1" style={{ fontSize: size === 'desktop' ? 22 : 18 }}>
+            <h2 className="font-sans font-semibold text-ink mb-3 tracking-tighter1" style={{ fontSize: size === 'desktop' ? 26 : 18 }}>
               Acceso a cámara{' '}
               <span className="font-serif italic font-normal">{title}</span>
             </h2>
-            <p className="font-sans text-ink3 leading-[1.55] max-w-[360px]" style={{ fontSize: size === 'desktop' ? 14 : 13 }}>
+            <p className="font-sans text-ink3 leading-[1.55] max-w-[400px]" style={{ fontSize: size === 'desktop' ? 15 : 13 }}>
               {desc}
             </p>
           </div>
-          <div className="flex flex-col items-center gap-[10px] w-full">
+          <div className="flex flex-col items-center gap-3 w-full">
             <Button
               variant="primary"
-              size="md"
-              icon={<IcCamera s={15} w={1.7} />}
+              size={size === 'desktop' ? 'lg' : 'md'}
+              icon={<IcCamera s={size === 'desktop' ? 17 : 15} w={1.7} />}
               onClick={onEnable}
               className={size === 'mobile' ? 'w-full' : ''}
             >
               {denied ? 'Reintentar' : 'Habilitar cámara'}
             </Button>
             <div className="flex items-center gap-[6px] text-ink4">
-              <IcLock s={11} w={1.6} />
+              <IcLock s={12} w={1.6} />
               <SectionLabel>Sin almacenar frames · solo texto</SectionLabel>
             </div>
           </div>

@@ -142,7 +142,7 @@ export default function AppTranslatorPage() {
       <AppSidebar />
       <main className="flex-1 flex flex-col overflow-hidden">
         <AppHeader title="Traductor" status={translator.isActive ? 'active' : translator.engineStatus === 'error' ? 'error' : 'idle'} />
-        <div className="flex-1 p-6 flex flex-col gap-4 overflow-auto bg-bg">
+        <div className="flex-1 p-8 flex flex-col gap-5 overflow-auto bg-bg">
           <CameraCard
             ref={webcamRef}
             size="desktop"
@@ -157,7 +157,7 @@ export default function AppTranslatorPage() {
                 <div className="flex justify-center gap-2 pt-2">
                   <Button
                     variant={translator.isActive ? 'secondary' : 'primary'}
-                    size="sm"
+                    size="md"
                     onClick={() => (translator.isActive ? translator.stop() : translator.start())}
                   >
                     {translator.isActive ? 'Pausar traducción' : 'Reanudar traducción'}

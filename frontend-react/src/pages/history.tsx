@@ -59,18 +59,18 @@ function HistoryList({
   }
   if (items.length === 0) {
     return (
-      <div className="flex flex-col items-center gap-4 py-20 text-center">
-        <div className="w-[120px] h-[120px] rounded-full border border-dashed border-ink5 flex items-center justify-center text-ink4">
-          <IcHistory s={36} w={1.4} />
+      <div className="flex flex-col items-center gap-5 py-24 text-center">
+        <div className="w-[140px] h-[140px] rounded-full border border-dashed border-ink5 flex items-center justify-center text-ink4">
+          <IcHistory s={42} w={1.4} />
         </div>
-        <h3 className="font-sans text-22 font-semibold text-ink tracking-tighter1">
+        <h3 className="font-sans text-26 font-semibold text-ink tracking-tighter1">
           Sin <span className="font-serif italic font-normal">traducciones</span>
         </h3>
-        <p className="font-sans text-14 text-ink3 max-w-sm">
+        <p className="font-sans text-15 text-ink3 max-w-md">
           Cuando guardes una traducción aparecerá aquí.
         </p>
         <Link to="/app">
-          <Button variant="primary" size="md">
+          <Button variant="primary" size="lg">
             Ir al traductor
           </Button>
         </Link>
@@ -78,30 +78,30 @@ function HistoryList({
     );
   }
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-5">
       {hasLocal && (
         <div className="flex items-center justify-between">
           <SectionLabel>Guardadas localmente</SectionLabel>
-          <Button variant="ghost" size="sm" onClick={onClearLocal}>
+          <Button variant="ghost" size="md" onClick={onClearLocal}>
             Limpiar locales
           </Button>
         </div>
       )}
-      <ul className="flex flex-col gap-2">
+      <ul className="flex flex-col gap-3">
         {items.map((item) => (
           <li
             key={`${item._origin}-${item.id}`}
-            className="bg-surface border border-border rounded-12 p-4 flex items-center justify-between gap-4"
+            className="bg-surface border border-border rounded-12 p-5 flex items-center justify-between gap-4"
           >
             <div className="flex-1 min-w-0">
-              <p className="font-serif italic text-ink text-20 tracking-tight1 break-all">
+              <p className="font-serif italic text-ink text-22 tracking-tight1 break-all">
                 {item.text}
               </p>
-              <p className="font-mono text-10 text-ink4 mt-1 tracking-wide1">
+              <p className="font-mono text-11 text-ink4 mt-1 tracking-wide1">
                 {formatDate(item.savedAt)}
               </p>
             </div>
-            <span className="font-mono text-9 text-ink4 tracking-wide2 uppercase shrink-0">
+            <span className="font-mono text-10 text-ink4 tracking-wide2 uppercase shrink-0">
               {item._origin === 'local' ? 'local' : 'sync'}
             </span>
           </li>
@@ -203,7 +203,7 @@ export default function HistoryPage() {
       <AppSidebar historyCount={items.length} />
       <main className="flex-1 flex flex-col overflow-hidden">
         <AppHeader title="Historial" />
-        <div className="flex-1 p-6 overflow-auto bg-bg">
+        <div className="flex-1 p-8 overflow-auto bg-bg">
           <HistoryList
             items={items}
             loading={loading}

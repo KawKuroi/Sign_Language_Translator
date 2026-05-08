@@ -98,16 +98,16 @@ function FAQItem({ q, a }: { q: string; a: string }) {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex justify-between items-center py-7 text-left"
+        className="w-full flex justify-between items-center py-8 text-left"
         aria-expanded={open}
       >
-        <span className="font-sans font-medium text-16 text-ink tracking-tight1">{q}</span>
+        <span className="font-sans font-medium text-18 text-ink tracking-tight1">{q}</span>
         <span className={`flex text-ink4 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}>
-          <IcChevronDown s={16} />
+          <IcChevronDown s={18} />
         </span>
       </button>
       {open && (
-        <p className="font-sans text-15 text-ink3 leading-[1.65] pb-7 pr-8 -mt-1">{a}</p>
+        <p className="font-sans text-17 text-ink3 leading-[1.65] pb-8 pr-8 -mt-1">{a}</p>
       )}
     </div>
   );
@@ -116,16 +116,16 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 function DemoSection() {
   const { toast } = useToast();
   return (
-    <section className="px-10 pb-20">
-      <div className="max-w-[1100px] mx-auto">
-        <div className="grid grid-cols-2 gap-20 mb-12 items-end">
+    <section className="px-12 pb-24">
+      <div className="max-w-[1280px] mx-auto">
+        <div className="grid grid-cols-2 gap-24 mb-14 items-end">
           <div>
             <SectionLabel>·01 · DEMO</SectionLabel>
-            <h2 className="font-sans text-48 font-semibold text-ink mt-3 tracking-tighter2 leading-[1.05]">
+            <h2 className="font-sans text-56 font-semibold text-ink mt-4 tracking-tighter2 leading-[1.05]">
               Mira Signa <span className="font-serif italic font-normal">en acción</span>
             </h2>
           </div>
-          <p className="font-sans text-16 text-ink2 leading-[1.6]">
+          <p className="font-sans text-18 text-ink2 leading-[1.6]">
             Observa cómo nuestra tecnología procesa gestos complejos y los convierte en texto o voz
             instantáneamente.
           </p>
@@ -143,19 +143,19 @@ function DemoSection() {
             type="button"
             aria-label="Reproducir demo"
             onClick={() => toast({ title: 'Demo próximamente', description: 'El vídeo de demo estará disponible pronto.' })}
-            className="w-[72px] h-[72px] rounded-full bg-white flex items-center justify-center hover:scale-105 transition-transform pl-1"
+            className="w-[88px] h-[88px] rounded-full bg-white flex items-center justify-center hover:scale-105 transition-transform pl-1"
             style={{ boxShadow: '0 8px 32px rgba(255,255,255,0.15)' }}
           >
-            <IcPlay s={22} />
+            <IcPlay s={26} />
           </button>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 px-7 pb-6 pt-10" style={{ background: 'linear-gradient(transparent, rgba(0,0,0,0.7))' }}>
+        <div className="absolute bottom-0 left-0 right-0 px-8 pb-7 pt-12" style={{ background: 'linear-gradient(transparent, rgba(0,0,0,0.7))' }}>
           <div className="h-[2px] bg-white/15 rounded-full mb-3 relative">
             <div className="absolute left-0 top-0 h-full bg-white rounded-full" style={{ width: '34%' }} />
           </div>
           <div className="flex justify-between">
-            <span className="font-mono text-11 text-white tracking-wide1">02:14</span>
-            <span className="font-mono text-11 text-white/50 tracking-wide1">05:00</span>
+            <span className="font-mono text-12 text-white tracking-wide1">02:14</span>
+            <span className="font-mono text-12 text-white/50 tracking-wide1">05:00</span>
           </div>
         </div>
         </div>
@@ -170,63 +170,63 @@ function LandingDesktop() {
       <NavDesktop />
 
       {/* Hero */}
-      <section className="px-10 pt-[88px] pb-[72px]">
-        <div className="max-w-[1440px] mx-auto grid gap-14 items-start" style={{ gridTemplateColumns: '540px 1fr' }}>
+      <section className="px-12 pt-[112px] pb-[96px]">
+        <div className="max-w-[1440px] mx-auto grid gap-16 items-start" style={{ gridTemplateColumns: '620px 1fr' }}>
           <div>
-            <div className="flex gap-2 mb-9">
+            <div className="flex gap-2 mb-10">
               <Badge variant="dark">
-                <IcSparkle s={11} w={1.7} /> IA Generativa
+                <IcSparkle s={12} w={1.7} /> IA Generativa
               </Badge>
               <Badge variant="outline">
-                <IcCode s={11} w={1.7} /> Open Source
+                <IcCode s={12} w={1.7} /> Open Source
               </Badge>
             </div>
-            <h1 className="font-sans text-72 font-semibold text-ink leading-[0.98] tracking-tightest mb-6">
+            <h1 className="font-sans text-[88px] font-semibold text-ink leading-[0.98] tracking-tightest mb-7">
               Rompiendo<br />
               barreras con{' '}
               <span className="font-serif italic font-normal">signa</span>
             </h1>
-            <p className="font-sans text-17 text-ink2 leading-[1.55] mb-9 max-w-[480px]">
+            <p className="font-sans text-20 text-ink2 leading-[1.55] mb-10 max-w-[560px]">
               Traducción del alfabeto de Lenguaje de Señas Americano (ASL) en tiempo real con visión
               computacional. Una herramienta para conectar mundos de forma fluida, accesible y sin
               intermediarios.
             </p>
-            <div className="flex items-center gap-[10px]">
+            <div className="flex items-center gap-3">
               <Link to="/app">
-                <Button size="lg" variant="primary" iconRight={<IcArrowRight s={16} w={1.8} />}>
+                <Button size="lg" variant="primary" iconRight={<IcArrowRight s={18} w={1.8} />}>
                   Comenzar ahora
                 </Button>
               </Link>
               <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="secondary" icon={<IcGithub s={16} />}>
+                <Button size="lg" variant="secondary" icon={<IcGithub s={18} />}>
                   GitHub
                 </Button>
               </a>
-              <Button size="lg" variant="ghost" icon={<IcPlay s={11} />}>
+              <Button size="lg" variant="ghost" icon={<IcPlay s={13} />}>
                 Ver demo
               </Button>
             </div>
-            <div className="flex gap-10 mt-14 pt-7 border-t border-border">
-              <Metric value="<100ms" label="Latencia" />
-              <Metric value="24 letras" label="Alfabeto A-Y" />
-              <Metric value="ASL" label="Señas estáticas" />
+            <div className="flex gap-12 mt-16 pt-8 border-t border-border">
+              <Metric value="<100ms" label="Latencia" size="lg" />
+              <Metric value="24 letras" label="Alfabeto A-Y" size="lg" />
+              <Metric value="ASL" label="Señas estáticas" size="lg" />
             </div>
           </div>
           <div className="flex justify-end">
-            <div className="w-full max-w-[520px]">
-              <HeroPreview />
+            <div className="w-full max-w-[680px]">
+              <HeroPreview size="lg" />
             </div>
           </div>
         </div>
       </section>
 
       {/* Construido con */}
-      <div className="px-10 py-5 border-t border-b border-border">
-        <div className="max-w-[1440px] mx-auto flex items-center gap-7">
+      <div className="px-12 py-6 border-t border-b border-border">
+        <div className="max-w-[1440px] mx-auto flex items-center gap-8">
           <SectionLabel>Construido con</SectionLabel>
           {['React + TS', 'Spring Boot', 'FastAPI', 'TensorFlow', 'MediaPipe', 'Docker'].map((t, i, arr) => (
-            <span key={t} className="flex items-center gap-7">
-              <span className="font-mono font-medium text-12 text-ink2" style={{ letterSpacing: '-0.01em' }}>{t}</span>
+            <span key={t} className="flex items-center gap-8">
+              <span className="font-mono font-medium text-13 text-ink2" style={{ letterSpacing: '-0.01em' }}>{t}</span>
               {i < arr.length - 1 && <span className="w-[3px] h-[3px] rounded-full bg-ink5 shrink-0" />}
             </span>
           ))}
@@ -239,10 +239,10 @@ function LandingDesktop() {
       </div>
 
       {/* Capacidades */}
-      <section className="px-10 pb-20">
+      <section className="px-12 pb-24">
         <div className="max-w-[1440px] mx-auto">
         <SectionLabel>·02 · Capacidades</SectionLabel>
-        <h2 className="font-sans text-48 font-semibold text-ink mt-3 mb-12 tracking-tighter2 leading-[1.05] max-w-2xl">
+        <h2 className="font-sans text-56 font-semibold text-ink mt-4 mb-14 tracking-tighter2 leading-[1.05] max-w-3xl">
           Tecnología discreta, <span className="font-serif italic font-normal">impacto profundo</span>
         </h2>
         <div className="grid grid-cols-3 border border-border rounded-16 overflow-hidden bg-surface">
@@ -251,16 +251,16 @@ function LandingDesktop() {
             return (
               <div
                 key={f.title}
-                className={`p-9 ${i < 2 ? 'border-r border-border' : ''}`}
+                className={`p-10 ${i < 2 ? 'border-r border-border' : ''}`}
               >
-                <div className="flex items-center justify-between mb-7">
-                  <Icon s={20} w={1.6} />
-                  <span className="font-mono text-10 text-ink4 tracking-wide1">0{i + 1}</span>
+                <div className="flex items-center justify-between mb-8">
+                  <Icon s={22} w={1.6} />
+                  <span className="font-mono text-11 text-ink4 tracking-wide1">0{i + 1}</span>
                 </div>
-                <h3 className="font-sans text-20 font-semibold text-ink mb-2 tracking-tight1">
+                <h3 className="font-sans text-22 font-semibold text-ink mb-3 tracking-tight1">
                   {f.title}
                 </h3>
-                <p className="font-sans text-14 text-ink3 leading-[1.6]">{f.desc}</p>
+                <p className="font-sans text-15 text-ink3 leading-[1.6]">{f.desc}</p>
               </div>
             );
           })}
@@ -269,11 +269,11 @@ function LandingDesktop() {
       </section>
 
       {/* Comunidad */}
-      <section className="px-10 pb-[88px]">
+      <section className="px-12 pb-[112px]">
         <div className="max-w-[1440px] mx-auto">
         <div
           className="bg-black text-white rounded-24 relative overflow-hidden"
-          style={{ padding: '72px 64px' }}
+          style={{ padding: '88px 80px' }}
         >
           <div
             className="absolute inset-0 pointer-events-none"
@@ -285,26 +285,26 @@ function LandingDesktop() {
               WebkitMaskImage: 'radial-gradient(ellipse at 80% 50%, black 0%, transparent 70%)',
             }}
           />
-          <div className="relative max-w-[680px]">
-            <Badge variant="outline_white" className="mb-6">
+          <div className="relative max-w-[780px]">
+            <Badge variant="outline_white" className="mb-7">
               ·03 · Comunidad
             </Badge>
-            <h2 className="font-sans text-56 font-semibold text-white leading-[1.02] tracking-tighter2 mb-5">
+            <h2 className="font-sans text-68 font-semibold text-white leading-[1.02] tracking-tighter2 mb-6">
               Construyamos el<br />
               <span className="font-serif italic font-normal">futuro juntos.</span>
             </h2>
-            <p className="font-sans text-16 text-white/65 leading-[1.6] max-w-[560px] mb-9">
+            <p className="font-sans text-18 text-white/65 leading-[1.6] max-w-[640px] mb-10">
               Signa es código abierto. Creemos que la accesibilidad universal no debe tener dueños.
               Únete a desarrolladores y traductores para mejorar los modelos juntos.
             </p>
             <div className="flex gap-3">
               <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
-                <Button variant="white" size="lg" icon={<IcUsers s={16} w={1.8} />}>
+                <Button variant="white" size="lg" icon={<IcUsers s={18} w={1.8} />}>
                   Unirme a la comunidad
                 </Button>
               </a>
               <a href={`${GITHUB_URL}/Sign_Language_Translator`} target="_blank" rel="noopener noreferrer">
-                <Button variant="outline_white" size="lg" icon={<IcGithub s={16} />}>
+                <Button variant="outline_white" size="lg" icon={<IcGithub s={18} />}>
                   Cómo contribuir
                 </Button>
               </a>
@@ -315,14 +315,14 @@ function LandingDesktop() {
       </section>
 
       {/* FAQ */}
-      <section className="px-10 pt-6 pb-32">
+      <section className="px-12 pt-8 pb-40">
         <div
           className="max-w-[1440px] mx-auto"
-          style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '120px' }}
+          style={{ display: 'grid', gridTemplateColumns: '420px 1fr', gap: '140px' }}
         >
           <div>
             <SectionLabel>·04 · Preguntas</SectionLabel>
-            <h2 className="font-sans text-40 font-semibold text-ink mt-3 tracking-tighter2 leading-[1.05]">
+            <h2 className="font-sans text-48 font-semibold text-ink mt-4 tracking-tighter2 leading-[1.05]">
               Preguntas <span className="font-serif italic font-normal">frecuentes</span>
             </h2>
           </div>

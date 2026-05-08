@@ -76,11 +76,11 @@ function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-surface border border-border rounded-16 p-8 flex flex-col gap-4"
+      className="bg-surface border border-border rounded-16 p-10 flex flex-col gap-5"
     >
-      <div className="grid grid-cols-2 gap-4">
-        <div className="flex flex-col gap-[6px]">
-          <Label className="font-mono text-10 text-ink4 tracking-wide2 uppercase">Nombre</Label>
+      <div className="grid grid-cols-2 gap-5">
+        <div className="flex flex-col gap-2">
+          <Label className="font-mono text-11 text-ink4 tracking-wide2 uppercase">Nombre</Label>
           <Input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -88,8 +88,8 @@ function ContactForm() {
             required
           />
         </div>
-        <div className="flex flex-col gap-[6px]">
-          <Label className="font-mono text-10 text-ink4 tracking-wide2 uppercase">Correo</Label>
+        <div className="flex flex-col gap-2">
+          <Label className="font-mono text-11 text-ink4 tracking-wide2 uppercase">Correo</Label>
           <Input
             type="email"
             value={email}
@@ -99,19 +99,19 @@ function ContactForm() {
           />
         </div>
       </div>
-      <div className="flex flex-col gap-[6px]">
-        <Label className="font-mono text-10 text-ink4 tracking-wide2 uppercase">Mensaje</Label>
+      <div className="flex flex-col gap-2">
+        <Label className="font-mono text-11 text-ink4 tracking-wide2 uppercase">Mensaje</Label>
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="¿Cómo podemos mejorar?"
           required
           rows={5}
-          className="w-full rounded-8 border border-border bg-bg px-4 py-3 font-sans text-14 text-ink placeholder:text-ink4 focus:outline-none focus:ring-2 focus:ring-ink focus:ring-offset-1 resize-none"
+          className="w-full rounded-8 border border-border bg-bg px-4 py-3 font-sans text-15 text-ink placeholder:text-ink4 focus:outline-none focus:ring-2 focus:ring-ink focus:ring-offset-1 resize-none"
         />
       </div>
       <div>
-        <Button type="submit" variant="primary" icon={<IcSend s={13} w={1.6} />} disabled={sending}>
+        <Button type="submit" variant="primary" icon={<IcSend s={15} w={1.6} />} disabled={sending}>
           {sending ? 'Enviando…' : 'Enviar mensaje'}
         </Button>
       </div>
@@ -125,16 +125,16 @@ function AboutDesktop() {
       <NavDesktop />
 
       {/* Quién está detrás */}
-      <section className="px-10 pt-[88px] pb-16">
-        <div className="max-w-[1240px] mx-auto grid grid-cols-2 gap-20 items-end">
+      <section className="px-12 pt-[112px] pb-20">
+        <div className="max-w-[1440px] mx-auto grid grid-cols-2 gap-24 items-end">
           <div>
             <SectionLabel>·01 · Quién está detrás</SectionLabel>
-            <h1 className="font-sans text-72 font-semibold text-ink leading-[0.95] tracking-tightest mt-5">
+            <h1 className="font-sans text-[88px] font-semibold text-ink leading-[0.95] tracking-tightest mt-6">
               Un proyecto<br />
               <span className="font-serif italic font-normal">en solitario</span>.
             </h1>
           </div>
-          <p className="font-sans text-17 text-ink2 leading-[1.6] max-w-[480px]">
+          <p className="font-sans text-20 text-ink2 leading-[1.6] max-w-[560px]">
             Signa nació como un experimento personal sobre cómo la IA puede acortar distancias.
             Lo construyo en mis horas libres, con Claude Code como copiloto, y con la convicción
             de que la accesibilidad no debería esperar a tener un equipo grande detrás.
@@ -142,40 +142,40 @@ function AboutDesktop() {
         </div>
       </section>
 
-      <div className="max-w-[1240px] mx-auto px-10">
+      <div className="max-w-[1440px] mx-auto px-12">
         <Divider />
       </div>
 
       {/* El equipo */}
-      <section className="px-10 py-14">
-        <div className="max-w-[1240px] mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="font-sans text-22 font-semibold text-ink tracking-tight1">El equipo</h2>
+      <section className="px-12 py-16">
+        <div className="max-w-[1440px] mx-auto">
+        <div className="flex justify-between items-center mb-10">
+          <h2 className="font-sans text-26 font-semibold text-ink tracking-tight1">El equipo</h2>
           <SectionLabel>1 humano · 1 IA</SectionLabel>
         </div>
 
-        <div className="grid gap-5" style={{ gridTemplateColumns: '1.4fr 1fr' }}>
+        <div className="grid gap-6" style={{ gridTemplateColumns: '1.4fr 1fr' }}>
           {/* Card humano */}
-          <div className="bg-surface border border-border rounded-20 p-9 grid gap-8 items-start" style={{ gridTemplateColumns: '200px 1fr' }}>
-            <div className="w-[200px] h-[200px] rounded-16 bg-surface2 border border-border flex items-center justify-center relative shrink-0 overflow-hidden">
-              <span className="font-serif italic text-[130px] text-ink leading-none select-none -mt-2">k</span>
-              <span className="absolute top-3 right-3 font-mono text-10 text-ink4 tracking-wide1">/01</span>
+          <div className="bg-surface border border-border rounded-20 p-10 grid gap-10 items-start" style={{ gridTemplateColumns: '220px 1fr' }}>
+            <div className="w-[220px] h-[220px] rounded-16 bg-surface2 border border-border flex items-center justify-center relative shrink-0 overflow-hidden">
+              <span className="font-serif italic text-[150px] text-ink leading-none select-none -mt-2">k</span>
+              <span className="absolute top-3 right-3 font-mono text-11 text-ink4 tracking-wide1">/01</span>
             </div>
             <div className="pt-1">
               <SectionLabel>Founder · Engineer · Designer</SectionLabel>
-              <h3 className="font-sans text-32 font-semibold text-ink tracking-tighter1 mt-[10px] mb-1 leading-[1.05]">
+              <h3 className="font-sans text-40 font-semibold text-ink tracking-tighter1 mt-3 mb-1 leading-[1.05]">
                 Kaw<span className="font-serif italic font-normal">Kuroi</span>
               </h3>
-              <p className="font-mono text-12 text-ink4 mb-[18px] tracking-wide1">@kawkuroi</p>
-              <p className="font-sans text-14 text-ink3 leading-[1.6] mb-6">
+              <p className="font-mono text-13 text-ink4 mb-5 tracking-wide1">@kawkuroi</p>
+              <p className="font-sans text-15 text-ink3 leading-[1.6] mb-7">
                 Diseño, desarrollo y entreno los modelos. Cada decisión —desde la arquitectura
                 de microservicios hasta el placement de un botón— pasa por mis manos.
               </p>
               <div className="flex gap-2 flex-wrap">
-                <Pill href={GITHUB_URL} icon={<IcGithub s={14} />}>
+                <Pill href={GITHUB_URL} icon={<IcGithub s={15} />}>
                   github.com/KawKuroi
                 </Pill>
-                <Pill href="#" icon={<IcLink s={13} w={1.6} />}>
+                <Pill href="#" icon={<IcLink s={14} w={1.6} />}>
                   Portfolio
                 </Pill>
               </div>
@@ -183,22 +183,22 @@ function AboutDesktop() {
           </div>
 
           {/* Card IA */}
-          <div className="bg-black text-white rounded-20 p-9 flex flex-col justify-between relative overflow-hidden">
+          <div className="bg-black text-white rounded-20 p-10 flex flex-col justify-between relative overflow-hidden">
             <div className="absolute inset-0 pointer-events-none" style={GRID_OVERLAY_STYLE} />
             <div className="relative">
-              <div className="flex items-center justify-between mb-7">
+              <div className="flex items-center justify-between mb-8">
                 <SectionLabel className="text-white/50 uppercase tracking-wide2">Pair programmer · IA</SectionLabel>
-                <span className="font-mono text-10 text-white/40 tracking-wide1">/02</span>
+                <span className="font-mono text-11 text-white/40 tracking-wide1">/02</span>
               </div>
-              <h3 className="font-sans text-32 font-semibold text-white tracking-tighter1 mb-[14px] leading-[1.05]">
+              <h3 className="font-sans text-40 font-semibold text-white tracking-tighter1 mb-4 leading-[1.05]">
                 Claude <span className="font-serif italic font-normal">Code</span>
               </h3>
-              <p className="font-sans text-14 text-white/70 leading-[1.6]">
+              <p className="font-sans text-15 text-white/70 leading-[1.6]">
                 Mi colaborador en arquitectura, refactors y debugging. Acelera lo que sería
                 imposible solo, manteniéndome a cargo de cada decisión de producto.
               </p>
             </div>
-            <div className="relative flex gap-2 mt-7 flex-wrap">
+            <div className="relative flex gap-2 mt-8 flex-wrap">
               <Pill dark>Anthropic</Pill>
               <Pill dark>Sonnet 4.5</Pill>
             </div>
@@ -208,21 +208,21 @@ function AboutDesktop() {
       </section>
 
       {/* Tres servicios */}
-      <section className="px-10 pb-20">
-        <div className="max-w-[1240px] mx-auto">
+      <section className="px-12 pb-24">
+        <div className="max-w-[1440px] mx-auto">
           <SectionLabel>·02 · Cómo se construye</SectionLabel>
-          <h2 className="font-sans text-48 font-semibold text-ink mt-3 mb-12 tracking-tighter2 leading-[1.05]">
+          <h2 className="font-sans text-56 font-semibold text-ink mt-4 mb-14 tracking-tighter2 leading-[1.05]">
             Tres servicios, <span className="font-serif italic font-normal">una idea</span>
           </h2>
           <div className="grid grid-cols-3 border border-border rounded-16 overflow-hidden">
             {stackCards.map((s, i) => (
-              <div key={s.tag} className={`p-9 bg-surface ${i < 2 ? 'border-r border-border' : ''}`}>
-                <div className="flex items-center justify-between mb-7">
+              <div key={s.tag} className={`p-10 bg-surface ${i < 2 ? 'border-r border-border' : ''}`}>
+                <div className="flex items-center justify-between mb-8">
                   <SectionLabel emphasized>{s.tag}</SectionLabel>
-                  <span className="font-mono text-10 text-ink4 tracking-wide1">0{i + 1}</span>
+                  <span className="font-mono text-11 text-ink4 tracking-wide1">0{i + 1}</span>
                 </div>
-                <h3 className="font-sans text-20 font-semibold text-ink mb-2 tracking-tight1">{s.stack}</h3>
-                <p className="font-sans text-14 text-ink3 leading-[1.6]">{s.desc}</p>
+                <h3 className="font-sans text-22 font-semibold text-ink mb-3 tracking-tight1">{s.stack}</h3>
+                <p className="font-sans text-15 text-ink3 leading-[1.6]">{s.desc}</p>
               </div>
             ))}
           </div>
@@ -230,17 +230,17 @@ function AboutDesktop() {
       </section>
 
       {/* Contacto */}
-      <section className="px-10 pb-24">
+      <section className="px-12 pb-28">
         <div
-          className="max-w-[1240px] mx-auto items-start"
-          style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '120px' }}
+          className="max-w-[1440px] mx-auto items-start"
+          style={{ display: 'grid', gridTemplateColumns: '420px 1fr', gap: '140px' }}
         >
           <div>
             <SectionLabel>·03 · Contacto</SectionLabel>
-            <h2 className="font-sans text-36 font-semibold text-ink mt-[14px] mb-4 tracking-tighter2 leading-[1.05]">
+            <h2 className="font-sans text-44 font-semibold text-ink mt-4 mb-5 tracking-tighter2 leading-[1.05]">
               Retroalimenta<span className="font-serif italic font-normal">ción</span>
             </h2>
-            <p className="font-sans text-14 text-ink3 leading-[1.6]">
+            <p className="font-sans text-15 text-ink3 leading-[1.6]">
               Tu opinión me ayuda a mejorar Signa. ¿Tienes una sugerencia, encontraste un bug o
               quieres saludar? Escríbeme.
             </p>
